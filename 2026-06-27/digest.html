@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Digest - 2026-06-27</title>
+<style>
+  :root { --bg:#f8f9fa; --card-bg:#fff; --text:#212529; --text-secondary:#6c757d; --border:#dee2e6; --accent:#2563eb; --accent-hover:#1d4ed8; --tag-bg:#e9ecef; --header-bg:#1e293b; --header-text:#f1f5f9; --nav-bg:rgba(255,255,255,0.95); }
+  @media (prefers-color-scheme:dark) { :root { --bg:#0f172a; --card-bg:#1e293b; --text:#e2e8f0; --text-secondary:#94a3b8; --border:#334155; --accent:#3b82f6; --accent-hover:#60a5fa; --tag-bg:#334155; --header-bg:#0f172a; --nav-bg:rgba(15,23,42,0.95); } }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; scroll-padding-top:70px; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--text); line-height:1.6; min-height:100vh; }
+  .header { background:linear-gradient(135deg,var(--header-bg),#334155); color:var(--header-text); padding:1.8rem 1.5rem; text-align:center; }
+  .header h1 { font-size:1.5rem; margin-bottom:0.3rem; }
+  .header .date { font-size:0.9rem; opacity:0.7; }
+  .nav-bar { position:sticky; top:0; z-index:100; background:var(--nav-bg); backdrop-filter:blur(10px); border-bottom:1px solid var(--border); padding:0.5rem 1rem; display:flex; flex-wrap:wrap; gap:0.35rem; overflow-x:auto; white-space:nowrap; -webkit-overflow-scrolling:touch; }
+  .nav-bar::-webkit-scrollbar { height:3px; }
+  .nav-bar::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+  .nav-link { display:inline-flex; align-items:center; gap:0.2rem; padding:0.3rem 0.7rem; border-radius:16px; background:var(--tag-bg); color:var(--text); text-decoration:none; font-size:0.82rem; transition:all 0.15s; flex-shrink:0; }
+  .nav-link:hover,.nav-link:focus { background:var(--accent); color:#fff; }
+  .nav-link .nav-count { font-size:0.7rem; opacity:0.5; margin-left:0.15rem; }
+  .nav-link:hover .nav-count { opacity:1; }
+  .container { max-width:900px; margin:0 auto; padding:1.5rem; }
+  .overview { background:var(--card-bg); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
+  .overview h2 { font-size:1.1rem; margin-bottom:0.8rem; color:var(--accent); }
+  .stats-grid { display:flex; flex-wrap:wrap; gap:0.5rem; }
+  .stat-tag { background:var(--tag-bg); border-radius:20px; padding:0.35rem 0.9rem; font-size:0.85rem; color:var(--text); transition:all 0.15s; }
+  .stat-tag:hover { background:var(--accent); color:#fff; }
+  .stat-tag .count { font-weight:700; color:var(--accent); }
+  .stat-tag:hover .count { color:#fff; }
+  .category-section { margin-bottom:2.5rem; scroll-margin-top:70px; }
+  .category-header { font-size:1.2rem; font-weight:700; padding:0.6rem 0; border-bottom:2px solid var(--accent); margin-bottom:1rem; cursor:pointer; user-select:none; display:flex; align-items:center; gap:0.5rem; }
+  .category-header .count { font-size:0.8rem; color:var(--text-secondary); font-weight:400; }
+  .category-header .toggle { margin-left:auto; font-size:0.75rem; color:var(--text-secondary); }
+  .category-header.collapsed .toggle::after { content:"Expand +"; }
+  .category-header .toggle::after { content:"Collapse -"; }
+  .articles-list { display:flex; flex-direction:column; gap:0.6rem; }
+  .articles-list.hidden { display:none; }
+  .article-card { background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:0.75rem 1rem; transition:box-shadow 0.15s; }
+  .article-card:hover { box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+  .article-card .top-row { display:flex; align-items:flex-start; gap:0.5rem; }
+  .card-num { color:var(--text-secondary); font-size:0.75rem; min-width:1.4rem; text-align:right; opacity:0.4; flex-shrink:0; padding-top:0.15rem; }
+  .article-card .title { font-size:0.95rem; font-weight:600; line-height:1.45; flex:1; }
+  .article-card .title a { color:var(--text); text-decoration:none; word-break:break-all; }
+  .article-card .title a:hover { color:var(--accent-hover); text-decoration:underline; }
+  .article-card .title a:visited { color:var(--text-secondary); }
+  .quality-star { font-size:0.8rem; flex-shrink:0; white-space:nowrap; }
+  .quality-star.q5 { color:#e11d48; } .quality-star.q4 { color:#f59e0b; } .quality-star.q3 { color:#d97706; }
+  .article-card .meta { display:flex; flex-wrap:wrap; gap:0.6rem; font-size:0.78rem; color:var(--text-secondary); }
+  .article-card .summary { font-size:0.85rem; color:var(--text-secondary); line-height:1.5; }
+  .back-to-top { position:fixed; bottom:2rem; right:2rem; width:2.5rem; height:2.5rem; border-radius:50%; background:var(--accent); color:#fff; border:none; cursor:pointer; font-size:1.2rem; box-shadow:0 2px 8px rgba(0,0,0,0.2); opacity:0; transition:opacity 0.3s; z-index:999; display:flex; align-items:center; justify-content:center; }
+  .back-to-top.show { opacity:1; }
+  .back-to-top:hover { background:var(--accent-hover); }
+  .footer { text-align:center; padding:2rem; font-size:0.8rem; color:var(--text-secondary); }
+  @media (max-width:640px) { .header h1 { font-size:1.3rem; } .container { padding:0.75rem; } .article-card { padding:0.65rem 0.75rem; } .back-to-top { bottom:1rem; right:1rem; } }
+</style>
+</head>
+<body>
+<div class="header"><h1>Daily Digest</h1><div class="date">2026-06-27</div></div>
+<nav class="nav-bar">
+  
+  <a href="#体育竞技" class="nav-link">⚽ 体育竞技<span class="nav-count">6</span></a>
+  
+  <a href="#社会热点" class="nav-link">🔥 社会热点<span class="nav-count">5</span></a>
+  
+  <a href="#航天科技" class="nav-link">🚀 航天科技<span class="nav-count">2</span></a>
+  
+  <a href="#娱乐影视" class="nav-link">🎬 娱乐影视<span class="nav-count">1</span></a>
+  
+  <a href="#商业创投" class="nav-link">💰 商业创投<span class="nav-count">1</span></a>
+  
+  <a href="#编程开发" class="nav-link">💻 编程开发<span class="nav-count">2</span></a>
+  
+  <a href="#消费电子" class="nav-link">📱 消费电子<span class="nav-count">1</span></a>
+  
+  <a href="#综合资讯" class="nav-link">📋 综合资讯<span class="nav-count">2</span></a>
+  
+  <a href="#设计艺术" class="nav-link">🎨 设计艺术<span class="nav-count">3</span></a>
+  
+  <a href="#人工智能" class="nav-link">🤖 人工智能<span class="nav-count">4</span></a>
+  
+</nav>
+<div class="container">
+  <div class="overview">
+    <h2>Overview - 27 items, 10 categories</h2>
+    <div class="stats-grid">
+      
+      <a href="#体育竞技" class="stat-tag" style="text-decoration:none;cursor:pointer">⚽ 体育竞技 <span class="count">6</span></a>
+      
+      <a href="#社会热点" class="stat-tag" style="text-decoration:none;cursor:pointer">🔥 社会热点 <span class="count">5</span></a>
+      
+      <a href="#航天科技" class="stat-tag" style="text-decoration:none;cursor:pointer">🚀 航天科技 <span class="count">2</span></a>
+      
+      <a href="#娱乐影视" class="stat-tag" style="text-decoration:none;cursor:pointer">🎬 娱乐影视 <span class="count">1</span></a>
+      
+      <a href="#商业创投" class="stat-tag" style="text-decoration:none;cursor:pointer">💰 商业创投 <span class="count">1</span></a>
+      
+      <a href="#编程开发" class="stat-tag" style="text-decoration:none;cursor:pointer">💻 编程开发 <span class="count">2</span></a>
+      
+      <a href="#消费电子" class="stat-tag" style="text-decoration:none;cursor:pointer">📱 消费电子 <span class="count">1</span></a>
+      
+      <a href="#综合资讯" class="stat-tag" style="text-decoration:none;cursor:pointer">📋 综合资讯 <span class="count">2</span></a>
+      
+      <a href="#设计艺术" class="stat-tag" style="text-decoration:none;cursor:pointer">🎨 设计艺术 <span class="count">3</span></a>
+      
+      <a href="#人工智能" class="stat-tag" style="text-decoration:none;cursor:pointer">🤖 人工智能 <span class="count">4</span></a>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="体育竞技">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      ⚽ 体育竞技
+      <span class="count">(6)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2054243318549018449" target="_blank" rel="noopener">神剧情！阿尔及利亚 3-3 奥地利携手出线，卡拉季奇绝平，如何评价本场比赛？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">世界杯小组赛阿尔及利亚3-3战平奥地利，卡拉季奇绝平，两队携手出线。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=世界杯32强全名单" target="_blank" rel="noopener">世界杯32强全名单</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">世界杯32强名单公布，引发热议。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=阿根廷任意球破门" target="_blank" rel="noopener">阿根廷任意球破门</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">阿根廷队任意球破门，引发微博热搜关注。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">4</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=世界杯32强对阵出炉" target="_blank" rel="noopener">世界杯32强对阵出炉</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">世界杯32强对阵名单公布，引发热议。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">5</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=吴艳妮睡过头素颜去比赛" target="_blank" rel="noopener">吴艳妮睡过头素颜去比赛</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">运动员吴艳妮因睡过头素颜参赛引热议。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">6</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=阿根廷世界杯首个丢球" target="_blank" rel="noopener">阿根廷世界杯首个丢球</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">阿根廷在世界杯比赛中首次失球，引发热议。</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="社会热点">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      🔥 社会热点
+      <span class="count">(5)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=伊朗出局" target="_blank" rel="noopener">伊朗出局</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">伊朗相关事件引发微博热搜第一，热度极高。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=结婚的时候没想到我天天回来吧" target="_blank" rel="noopener">结婚的时候没想到我天天回来吧</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">微博热搜话题，讨论婚姻生活中的意外变化。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=美军对伊朗实施新一轮打击" target="_blank" rel="noopener">美军对伊朗实施新一轮打击</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">美军对伊朗实施新一轮打击，引发国际关注。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">4</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=诋毁袁隆平成果网红称大不了就进去" target="_blank" rel="noopener">诋毁袁隆平成果网红称大不了就进去</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">网红诋毁袁隆平科研成果，引发公众愤怒和讨论。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">5</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=德国人为抢中国空调开始氪金了" target="_blank" rel="noopener">德国人为抢中国空调开始氪金了</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">德国人抢购中国空调引发热议，热度高。</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="航天科技">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      🚀 航天科技
+      <span class="count">(2)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=全球最大人造太阳超导磁体在中国" target="_blank" rel="noopener">全球最大人造太阳超导磁体在中国</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">中国成功制造全球最大人造太阳超导磁体，推动核聚变研究。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870984.html?f=rss" target="_blank" rel="noopener">太空算力的国产答案：用光子更高效，马斯克和老黄都太绕了</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="娱乐影视">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      🎬 娱乐影视
+      <span class="count">(1)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=乘风姐姐蓝调优雅力量" target="_blank" rel="noopener">乘风姐姐蓝调优雅力量</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">乘风姐姐展现蓝调优雅风格，引发热议。</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="商业创投">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      💰 商业创投
+      <span class="count">(1)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=福特CEO坦言根本赢不了比亚迪" target="_blank" rel="noopener">福特CEO坦言根本赢不了比亚迪</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">福特CEO承认在电动汽车领域无法击败比亚迪，引发行业关注。</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="编程开发">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      💻 编程开发
+      <span class="count">(2)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872322772980738?f=rss" target="_blank" rel="noopener">腾讯小范围内测TenPay Go，面向境外人士来华支付</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">腾讯正在内测一款面向境外人士的“来华生活便利助手”，旨在提供包括移动支付服务的一站式数字生活服务。该App将支持在全国数千万家微信支付合作商户中直接消费，目前仍在小范围测试中，暂未全量开放体验。记者留意到，该款APP已在App Store上架，名为TenPayGo。（界面）</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://www.producthunt.com/products/postproxy" target="_blank" rel="noopener">Postproxy - Engagement API</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Publish, reply, and analyze social media via API Discussion | Link</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="消费电子">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      📱 消费电子
+      <span class="count">(1)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872283604276228?f=rss" target="_blank" rel="noopener">蔚来ES8大五座版将于7月9日上市</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">6月27日，蔚来宣布ES8大五座版开启预订，将于7月9日正式上市。</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="综合资讯">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      📋 综合资讯
+      <span class="count">(2)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872268617897217?f=rss" target="_blank" rel="noopener">富信科技：公司近期未新增通信领域重大客户 亦未获取新增大额订单</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">富信科技6月28日发布声明，《破局与重塑：Micro-TEC国产化浪潮》是公司销售周志奇在CFCF2026光连接大会（6.27苏州）的演讲主题，其在该演讲中仅对公司产品和技术进行了介绍；网传《&lt;破局与重塑：Micro-TEC国产化浪潮&gt;周志奇演讲完整原文》为杜撰文章，此文与公司无关并完全不代表公司立场。公司生产的Micro TEC产品所使用的碲化铋材料无需使用纯度达6N级及以上的碲、铋等单质原料；公司近期未新增通信领域重大客户，亦未获取新增大额订单。据了解，行业内生产Micro TEC产品所使用的碲化铋材料亦无需使用纯度达6N级及以上的碲、铋等单质原料。公司已就此文涉及的虚假信息内</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://www.producthunt.com/products/figma" target="_blank" rel="noopener">Figma Motion</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Your Figma canvas now has a timeline Discussion | Link</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="设计艺术">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      🎨 设计艺术
+      <span class="count">(3)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870985.html?f=rss" target="_blank" rel="noopener">IBM宣布0.7nm突破，工程师却集体“挑刺”</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870982.html?f=rss" target="_blank" rel="noopener">钱在挪窝</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://www.producthunt.com/products/saycraft" target="_blank" rel="noopener">SayCraft</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Build a web app by talking through a meeting Discussion | Link</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="人工智能">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      🤖 人工智能
+      <span class="count">(4)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870981.html?f=rss" target="_blank" rel="noopener">AI家教，撕开东亚内卷的口子</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870980.html?f=rss" target="_blank" rel="noopener">本周AI 项目推荐：Link、Agentic Wallets、Token Pay......Token支付底座长啥样</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://www.producthunt.com/products/grass-claude-code-from-your-phone" target="_blank" rel="noopener">Grass 2.0</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">The always-on computer for your coding agents Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">4</span>
+          <div class="title"><a href="https://www.producthunt.com/products/polygraph" target="_blank" rel="noopener">Polygraph</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Let AI agents see cross repo and maintain session memory. Discussion | Link</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Top">Up</button>
+<div class="footer">Generated by NewsDigest - 2026-06-27</div>
+<script>
+(function(){var btn=document.getElementById('backToTop');var t=false;window.addEventListener('scroll',function(){if(!t){requestAnimationFrame(function(){btn.classList.toggle('show',window.scrollY>400);t=false});t=true;});})();
+</script>
+</body>
+</html>

@@ -1,0 +1,5045 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Digest - 2026-06-28</title>
+<style>
+  :root { --bg:#f8f9fa; --card-bg:#fff; --text:#212529; --text-secondary:#6c757d; --border:#dee2e6; --accent:#2563eb; --accent-hover:#1d4ed8; --tag-bg:#e9ecef; --header-bg:#1e293b; --header-text:#f1f5f9; --nav-bg:rgba(255,255,255,0.95); }
+  @media (prefers-color-scheme:dark) { :root { --bg:#0f172a; --card-bg:#1e293b; --text:#e2e8f0; --text-secondary:#94a3b8; --border:#334155; --accent:#3b82f6; --accent-hover:#60a5fa; --tag-bg:#334155; --header-bg:#0f172a; --nav-bg:rgba(15,23,42,0.95); } }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; scroll-padding-top:70px; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--text); line-height:1.6; min-height:100vh; }
+  .header { background:linear-gradient(135deg,var(--header-bg),#334155); color:var(--header-text); padding:1.8rem 1.5rem; text-align:center; }
+  .header h1 { font-size:1.5rem; margin-bottom:0.3rem; }
+  .header .date { font-size:0.9rem; opacity:0.7; }
+  .nav-bar { position:sticky; top:0; z-index:100; background:var(--nav-bg); backdrop-filter:blur(10px); border-bottom:1px solid var(--border); padding:0.5rem 1rem; display:flex; flex-wrap:wrap; gap:0.35rem; overflow-x:auto; white-space:nowrap; -webkit-overflow-scrolling:touch; }
+  .nav-bar::-webkit-scrollbar { height:3px; }
+  .nav-bar::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+  .nav-link { display:inline-flex; align-items:center; gap:0.2rem; padding:0.3rem 0.7rem; border-radius:16px; background:var(--tag-bg); color:var(--text); text-decoration:none; font-size:0.82rem; transition:all 0.15s; flex-shrink:0; }
+  .nav-link:hover,.nav-link:focus { background:var(--accent); color:#fff; }
+  .nav-link .nav-count { font-size:0.7rem; opacity:0.5; margin-left:0.15rem; }
+  .nav-link:hover .nav-count { opacity:1; }
+  .container { max-width:900px; margin:0 auto; padding:1.5rem; }
+  .overview { background:var(--card-bg); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
+  .overview h2 { font-size:1.1rem; margin-bottom:0.8rem; color:var(--accent); }
+  .stats-grid { display:flex; flex-wrap:wrap; gap:0.5rem; }
+  .stat-tag { background:var(--tag-bg); border-radius:20px; padding:0.35rem 0.9rem; font-size:0.85rem; color:var(--text); transition:all 0.15s; }
+  .stat-tag:hover { background:var(--accent); color:#fff; }
+  .stat-tag .count { font-weight:700; color:var(--accent); }
+  .stat-tag:hover .count { color:#fff; }
+  .category-section { margin-bottom:2.5rem; scroll-margin-top:70px; }
+  .category-header { font-size:1.2rem; font-weight:700; padding:0.6rem 0; border-bottom:2px solid var(--accent); margin-bottom:1rem; cursor:pointer; user-select:none; display:flex; align-items:center; gap:0.5rem; }
+  .category-header .count { font-size:0.8rem; color:var(--text-secondary); font-weight:400; }
+  .category-header .toggle { margin-left:auto; font-size:0.75rem; color:var(--text-secondary); }
+  .category-header.collapsed .toggle::after { content:"Expand +"; }
+  .category-header .toggle::after { content:"Collapse -"; }
+  .articles-list { display:flex; flex-direction:column; gap:0.6rem; }
+  .articles-list.hidden { display:none; }
+  .article-card { background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:0.75rem 1rem; transition:box-shadow 0.15s; }
+  .article-card:hover { box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+  .article-card .top-row { display:flex; align-items:flex-start; gap:0.5rem; }
+  .card-num { color:var(--text-secondary); font-size:0.75rem; min-width:1.4rem; text-align:right; opacity:0.4; flex-shrink:0; padding-top:0.15rem; }
+  .article-card .title { font-size:0.95rem; font-weight:600; line-height:1.45; flex:1; }
+  .article-card .title a { color:var(--text); text-decoration:none; word-break:break-all; }
+  .article-card .title a:hover { color:var(--accent-hover); text-decoration:underline; }
+  .article-card .title a:visited { color:var(--text-secondary); }
+  .quality-star { font-size:0.8rem; flex-shrink:0; white-space:nowrap; }
+  .quality-star.q5 { color:#e11d48; } .quality-star.q4 { color:#f59e0b; } .quality-star.q3 { color:#d97706; }
+  .article-card .meta { display:flex; flex-wrap:wrap; gap:0.6rem; font-size:0.78rem; color:var(--text-secondary); }
+  .article-card .summary { font-size:0.85rem; color:var(--text-secondary); line-height:1.5; }
+  .back-to-top { position:fixed; bottom:2rem; right:2rem; width:2.5rem; height:2.5rem; border-radius:50%; background:var(--accent); color:#fff; border:none; cursor:pointer; font-size:1.2rem; box-shadow:0 2px 8px rgba(0,0,0,0.2); opacity:0; transition:opacity 0.3s; z-index:999; display:flex; align-items:center; justify-content:center; }
+  .back-to-top.show { opacity:1; }
+  .back-to-top:hover { background:var(--accent-hover); }
+  .footer { text-align:center; padding:2rem; font-size:0.8rem; color:var(--text-secondary); }
+  @media (max-width:640px) { .header h1 { font-size:1.3rem; } .container { padding:0.75rem; } .article-card { padding:0.65rem 0.75rem; } .back-to-top { bottom:1rem; right:1rem; } }
+</style>
+</head>
+<body>
+<div class="header"><h1>Daily Digest</h1><div class="date">2026-06-28</div></div>
+<nav class="nav-bar">
+  
+  <a href="#编程开发" class="nav-link">💻 编程开发<span class="nav-count">27</span></a>
+  
+  <a href="#安全隐私" class="nav-link">🔒 安全隐私<span class="nav-count">2</span></a>
+  
+  <a href="#人工智能" class="nav-link">🤖 人工智能<span class="nav-count">61</span></a>
+  
+  <a href="#体育竞技" class="nav-link">⚽ 体育竞技<span class="nav-count">26</span></a>
+  
+  <a href="#社会热点" class="nav-link">🔥 社会热点<span class="nav-count">33</span></a>
+  
+  <a href="#娱乐影视" class="nav-link">🎬 娱乐影视<span class="nav-count">18</span></a>
+  
+  <a href="#航天科技" class="nav-link">🚀 航天科技<span class="nav-count">4</span></a>
+  
+  <a href="#人文社科" class="nav-link">📚 人文社科<span class="nav-count">6</span></a>
+  
+  <a href="#健康医疗" class="nav-link">🏥 健康医疗<span class="nav-count">1</span></a>
+  
+  <a href="#教育学习" class="nav-link">🎓 教育学习<span class="nav-count">3</span></a>
+  
+  <a href="#商业创投" class="nav-link">💰 商业创投<span class="nav-count">11</span></a>
+  
+  <a href="#消费电子" class="nav-link">📱 消费电子<span class="nav-count">30</span></a>
+  
+  <a href="#金融财经" class="nav-link">📈 金融财经<span class="nav-count">4</span></a>
+  
+  <a href="#食品旅行" class="nav-link">🍜 食品旅行<span class="nav-count">2</span></a>
+  
+  <a href="#综合资讯" class="nav-link">📋 综合资讯<span class="nav-count">33</span></a>
+  
+  <a href="#科学研究" class="nav-link">🔬 科学研究<span class="nav-count">3</span></a>
+  
+  <a href="#设计艺术" class="nav-link">🎨 设计艺术<span class="nav-count">16</span></a>
+  
+</nav>
+<div class="container">
+  <div class="overview">
+    <h2>Overview - 280 items, 17 categories</h2>
+    <div class="stats-grid">
+      
+      <a href="#编程开发" class="stat-tag" style="text-decoration:none;cursor:pointer">💻 编程开发 <span class="count">27</span></a>
+      
+      <a href="#安全隐私" class="stat-tag" style="text-decoration:none;cursor:pointer">🔒 安全隐私 <span class="count">2</span></a>
+      
+      <a href="#人工智能" class="stat-tag" style="text-decoration:none;cursor:pointer">🤖 人工智能 <span class="count">61</span></a>
+      
+      <a href="#体育竞技" class="stat-tag" style="text-decoration:none;cursor:pointer">⚽ 体育竞技 <span class="count">26</span></a>
+      
+      <a href="#社会热点" class="stat-tag" style="text-decoration:none;cursor:pointer">🔥 社会热点 <span class="count">33</span></a>
+      
+      <a href="#娱乐影视" class="stat-tag" style="text-decoration:none;cursor:pointer">🎬 娱乐影视 <span class="count">18</span></a>
+      
+      <a href="#航天科技" class="stat-tag" style="text-decoration:none;cursor:pointer">🚀 航天科技 <span class="count">4</span></a>
+      
+      <a href="#人文社科" class="stat-tag" style="text-decoration:none;cursor:pointer">📚 人文社科 <span class="count">6</span></a>
+      
+      <a href="#健康医疗" class="stat-tag" style="text-decoration:none;cursor:pointer">🏥 健康医疗 <span class="count">1</span></a>
+      
+      <a href="#教育学习" class="stat-tag" style="text-decoration:none;cursor:pointer">🎓 教育学习 <span class="count">3</span></a>
+      
+      <a href="#商业创投" class="stat-tag" style="text-decoration:none;cursor:pointer">💰 商业创投 <span class="count">11</span></a>
+      
+      <a href="#消费电子" class="stat-tag" style="text-decoration:none;cursor:pointer">📱 消费电子 <span class="count">30</span></a>
+      
+      <a href="#金融财经" class="stat-tag" style="text-decoration:none;cursor:pointer">📈 金融财经 <span class="count">4</span></a>
+      
+      <a href="#食品旅行" class="stat-tag" style="text-decoration:none;cursor:pointer">🍜 食品旅行 <span class="count">2</span></a>
+      
+      <a href="#综合资讯" class="stat-tag" style="text-decoration:none;cursor:pointer">📋 综合资讯 <span class="count">33</span></a>
+      
+      <a href="#科学研究" class="stat-tag" style="text-decoration:none;cursor:pointer">🔬 科学研究 <span class="count">3</span></a>
+      
+      <a href="#设计艺术" class="stat-tag" style="text-decoration:none;cursor:pointer">🎨 设计艺术 <span class="count">16</span></a>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="编程开发">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      💻 编程开发
+      <span class="count">(27)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://github.com/google-labs-code/design.md" target="_blank" rel="noopener">google-labs-code/design.md</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>1541</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">Google Labs提出DESIGN.md规范，让编码代理持久理解设计系统。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://github.com/JCodesMore/ai-website-cloner-template" target="_blank" rel="noopener">JCodesMore/ai-website-cloner-template</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>750</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">用AI编码代理一键克隆任何网站，基于TypeScript开发。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://github.com/garrytan/gstack" target="_blank" rel="noopener">garrytan/gstack</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>674</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">Garry Tan的Claude Code工具集，包含23个定制工具，覆盖CEO、设计、工程管理等多角色。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">4</span>
+          <div class="title"><a href="https://github.com/hugohe3/ppt-master" target="_blank" rel="noopener">hugohe3/ppt-master</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>589</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">AI工具可从文档生成可编辑PPT，支持原生形状动画、语音旁白和自定义模板。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">5</span>
+          <div class="title"><a href="https://github.com/IceWhaleTech/CasaOS" target="_blank" rel="noopener">IceWhaleTech/CasaOS</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>502</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">CasaOS是一个简单易用的开源个人云系统，基于Go语言开发。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">6</span>
+          <div class="title"><a href="https://github.com/ripienaar/free-for-dev" target="_blank" rel="noopener">ripienaar/free-for-dev</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>459</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">收集了面向开发运维的免费SaaS、PaaS和IaaS服务列表。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">7</span>
+          <div class="title"><a href="https://github.com/NanmiCoder/MediaCrawler" target="_blank" rel="noopener">NanmiCoder/MediaCrawler</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>394</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">一个支持多平台社交媒体数据爬取的开源Python工具。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">8</span>
+          <div class="title"><a href="https://github.com/anomalyco/opencode" target="_blank" rel="noopener">anomalyco/opencode</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>392</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">开源编码代理项目，使用TypeScript开发。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">9</span>
+          <div class="title"><a href="https://github.com/commaai/openpilot" target="_blank" rel="noopener">commaai/openpilot</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>322</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">openpilot是一个机器人操作系统，可升级300多款汽车的驾驶辅助系统。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">10</span>
+          <div class="title"><a href="https://github.com/Anil-matcha/Open-Generative-AI" target="_blank" rel="noopener">Anil-matcha/Open-Generative-AI</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>255</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">Unrestricted Open-source alternative to AI video platforms — Free AI image & video generation studio with 200+ models (Flux, Midjourney, Kling, Sora, Veo). No content filters. Self-hosted, MIT licensed. | Language: JavaScript</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">11</span>
+          <div class="title"><a href="https://github.com/every-app/open-seo" target="_blank" rel="noopener">every-app/open-seo</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>239</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">Open source alternative to Semrush and Ahrefs | Language: TypeScript</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">12</span>
+          <div class="title"><a href="https://www.fosslinux.com/158206/linux-on-older-hardware-revival-guide.htm" target="_blank" rel="noopener">Linux on Older Hardware: The Complete Revival Guide</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>208</span>
+          <span>fosslinux.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 208 | Comments: 120 | By: tapanjk</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">13</span>
+          <div class="title"><a href="https://cauenapier.com/blog/townsquare_release/" target="_blank" rel="noopener">Turn your site into a place people can bump into each other</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>183</span>
+          <span>cauenapier.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 183 | Comments: 81 | By: eustoria</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">14</span>
+          <div class="title"><a href="https://en.wikipedia.org/wiki/Underarm_bowling_incident_of_1981" target="_blank" rel="noopener">Underarm bowling incident of 1981</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>145</span>
+          <span>en.wikipedia.org</span>
+        </div>
+        
+        <div class="summary">HN Score: 145 | Comments: 140 | By: EndXA</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">15</span>
+          <div class="title"><a href="https://github.com/HKUDS/Vibe-Trading" target="_blank" rel="noopener">HKUDS/Vibe-Trading</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>92</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">"Vibe-Trading: Your Personal Trading Agent" | Language: Python</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">16</span>
+          <div class="title"><a href="https://gossamer-lang.org/" target="_blank" rel="noopener">Gossamer: a Rust-flavoured language with real goroutines and pause-free memory</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>87</span>
+          <span>gossamer-lang.org</span>
+        </div>
+        
+        <div class="summary">HN Score: 87 | Comments: 84 | By: mwheeler</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">17</span>
+          <div class="title"><a href="https://github.com/skx/slisp" target="_blank" rel="noopener">Slisp: Simple Lisp compiler (Linux/amd64)</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>66</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 66 | Comments: 8 | By: stevekemp</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">18</span>
+          <div class="title"><a href="https://github.com/microsoft/PowerToys" target="_blank" rel="noopener">microsoft/PowerToys</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>57</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">Microsoft PowerToys is a collection of utilities that supercharge productivity and customization on Windows | Language: C</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">19</span>
+          <div class="title"><a href="https://console.modular.com/signup" target="_blank" rel="noopener">Mojo programming language will become open-source soon</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>26</span>
+          <span>console.modular.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 26 | Comments: 9 | By: birdculture</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">20</span>
+          <div class="title"><a href="https://github.com/keycloak/keycloak" target="_blank" rel="noopener">keycloak/keycloak</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>20</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">Open Source Identity and Access Management For Modern Applications and Services | Language: Java</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">21</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872322772980738?f=rss" target="_blank" rel="noopener">腾讯小范围内测TenPay Go，面向境外人士来华支付</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">腾讯正在内测一款面向境外人士的“来华生活便利助手”，旨在提供包括移动支付服务的一站式数字生活服务。该App将支持在全国数千万家微信支付合作商户中直接消费，目前仍在小范围测试中，暂未全量开放体验。记者留意到，该款APP已在App Store上架，名为TenPayGo。（界面）</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">22</span>
+          <div class="title"><a href="https://github.com/dbt-labs/dbt-core" target="_blank" rel="noopener">dbt-labs/dbt-core</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>18</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">dbt enables data analysts and engineers to transform their data using the same practices that software engineers use to build applications. | Language: Rust</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">23</span>
+          <div class="title"><a href="https://www.producthunt.com/products/qapilot" target="_blank" rel="noopener">QApilot's CoWork</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">3x Mobile Automation. Same QE Team. Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">24</span>
+          <div class="title"><a href="https://www.producthunt.com/products/supra-player" target="_blank" rel="noopener">Supra Player</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Compare & Sync Videos Fast Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">25</span>
+          <div class="title"><a href="https://blog.jetbrains.com/rust/2026/06/25/rust-web-development-2026/" target="_blank" rel="noopener">The Unglamorous Side of Rust Web Development</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>7</span>
+          <span>blog.jetbrains.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 7 | Comments: 1 | By: vilasa</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">26</span>
+          <div class="title"><a href="https://github.com/mskrasnov/FSM" target="_blank" rel="noopener">Show HN: FSM – an advanced system monitor for Linux</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>7</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 7 | Comments: 1 | By: mskrasnov</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">27</span>
+          <div class="title"><a href="https://github.com/infiniteregrets/kv-psi" target="_blank" rel="noopener">Show HN: KV-psi, using Linux PSI to to trim an LLM KV cache</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>6</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 6 | Comments: 0 | By: infiniteregrets</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="安全隐私">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      🔒 安全隐私
+      <span class="count">(2)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://github.com/simplex-chat/simplex-chat" target="_blank" rel="noopener">simplex-chat/simplex-chat</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>1469</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">SimpleX：首个无用户标识的100%隐私消息网络，支持多平台。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://nesbitt.io/2026/06/26/incident-report-cve-2026-lgtm.html" target="_blank" rel="noopener">Incident CVE-2026-LGTM</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>577</span>
+          <span>nesbitt.io</span>
+        </div>
+        
+        <div class="summary">CVE-2026-LGTM安全漏洞引发关注，社区讨论热烈。</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="人工智能">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      🤖 人工智能
+      <span class="count">(61)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://github.com/topoteretes/cognee" target="_blank" rel="noopener">topoteretes/cognee</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>780</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">Cognee是开源AI记忆平台，为智能体提供持久长期记忆和自托管知识图谱引擎。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://github.com/xbtlin/ai-berkshire" target="_blank" rel="noopener">xbtlin/ai-berkshire</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>685</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">基于Claude Code的价值投资研究框架，融合四位大师方法论与多Agent并行研究。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E8%8B%A6%E7%86%AC3%E5%A4%A9%E5%87%BA%E5%B1%80+%E9%9F%A9%E5%9B%BD%E5%AA%92%E4%BD%93%E4%B8%80%E7%89%87%E5%93%80%E5%9A%8E&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">苦熬3天出局 韩国媒体一片哀嚎</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">6月28日，世界杯小组赛最后一天，民主刚果3-1击败乌兹别克斯坦。韩国队确定无缘12个小组第三的前8名，从而正式出局。赛后，韩国媒体一片哀嚎，纷纷发文：“希望破灭了，洪明甫的球队最终出局”“历史最差表现，奇迹没有发生”。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">4</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E9%98%BF%E6%A0%B9%E5%BB%B73-1%E7%BA%A6%E6%97%A6&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">阿根廷3-1约旦</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">世界杯连续三场破门，阿根廷3比1战胜约旦。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">5</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E7%83%AD%E6%B5%AA%E4%B8%8B%E7%9A%84%E5%BE%B7%E5%9B%BD%EF%BC%9A%E6%B2%A1%E6%9C%89%E7%A9%BA%E8%B0%83%E7%9A%84%E5%A4%8F%E5%A4%A9%E4%B9%8B%E5%9B%B0&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">热浪下的德国：没有空调的夏天之困</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">近日，一轮热浪席卷欧洲大陆。德国气象局26日初步观测数据显示，德国当天测得41.3摄氏度高温，创下了该国历史最高气温纪录。与此同时，欧洲大量家庭尚未配备空调，这场热浪提醒着人们：当气候条件已经改变，过去的建筑规范与生活方式需要如何适应。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">6</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E6%AF%95%E4%B8%9A%E6%99%9A%E4%BC%9A%E4%B8%8A%E5%A6%88%E5%A6%88%E7%9B%9B%E8%A3%85%E5%87%BA%E5%B8%AD&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">毕业晚会上妈妈盛装出席</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">近日，一位母亲盛装出席儿子的毕业典礼，并与儿子共跳《爱的华尔兹》，视频显示母子配合默契，网友称赞：妈妈怎么这么漂亮啊！</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">7</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E5%A5%B3%E7%94%9F%E6%AF%95%E4%B8%9A%E5%AF%84%E5%87%A0%E7%99%BE%E6%96%A4%E5%8C%85%E8%A3%B9%E5%A6%88%E5%A6%88%E7%9B%B4%E5%91%BC%E5%8F%AF%E6%80%95&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">女生毕业寄几百斤包裹妈妈直呼可怕</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">近日，武汉一名毕业生从学校往安徽家中寄了12个重达数百斤的包裹，总运费花了1104元，快递堆满半个客厅，收件的妈妈直呼“好吓人，不敢打开”，此事引发网友热议，不少人调侃她没赶上毕业季专属寄件优惠。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">8</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=C%E7%BD%97%E5%B0%86%E5%AF%B9%E9%98%B5%E8%8E%AB%E5%BE%B7%E9%87%8C%E5%A5%87&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">C罗将对阵莫德里奇</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">北京时间6月28日，世界杯小组赛最后一轮，葡萄牙0-0战平哥伦比亚，葡萄牙小组第二出线。根据最新的赛程签位，葡萄牙在1/16决赛的对手是克罗地亚，C罗将对阵莫德里奇。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">9</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E9%9F%A9%E5%9B%BD%E9%98%9F11%E4%BA%BF%E9%9F%A9%E5%85%83%E5%87%BA%E7%BA%BF%E5%A5%96%E9%87%91%E6%B3%A1%E6%B1%A4&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">韩国队11亿韩元出线奖金泡汤</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">在北京时间6月28日结束的世界杯K组末轮1场焦点战中，民主刚果3-1逆转乌兹别克斯坦。积4分的民主刚果在确定跻身淘汰赛的同时，也正式宣告韩国男足出局，韩国队11亿韩元出线奖金泡汤。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">10</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E6%B2%B3%E5%8D%97%E4%B8%80%E6%9D%91%E6%94%AF%E4%B9%A6%E7%BB%84%E7%BB%87%E6%B8%85%E9%99%A4%E6%9D%91%E5%86%85%E6%8A%A4%E5%9D%A1&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">河南一村支书组织清除村内护坡</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">近日，河南商丘一名村支书组织村民清理村内挤占公共道路的护坡，移除影响交通的杂草、石块和杂物，并计划加宽路面、增设停车位和晾晒区。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">11</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E6%AF%95%E4%B8%9A7%E5%B9%B4%E5%90%8E%E4%BB%96%E5%86%B3%E5%AE%9A%E5%86%8D%E5%94%B1%E3%80%8A%E8%B5%B7%E9%A3%8E%E4%BA%86%E3%80%8B&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">毕业7年后他决定再唱《起风了》</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">6月27日，青岛大学2019届毕业生苑光昊在毕业7年后决定再次演唱曾引发网络轰动的歌曲《起风了》。2019年他与同学宋姿璇在校毕业典礼表演该曲，视频播放量超千万，但此后他拒绝十多家公司邀约，选择经营录音工作室保持音乐创作。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">12</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E5%BD%93%E4%B8%80%E6%A1%A3%E5%A5%B3%E6%80%A7%E8%8A%82%E7%9B%AE%E9%80%89%E6%8B%A9%E5%85%B3%E2%80%9C%E7%BE%8E%E9%A2%9C%E6%BB%A4%E9%95%9C%E2%80%9D&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">当一档女性节目选择关“美颜滤镜”</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">《乘风2026》主动放弃了剪辑、修音，启用直播全开麦模式。开播初期，那些过度真实的画面掀起了不少争议。但临近收官，观众才回过神来：真诚的表达，无惧不完美。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">13</span>
+          <div class="title"><a href="https://github.com/workweave/router" target="_blank" rel="noopener">Show HN: Smart model routing directly in Claude, Codex and Cursor</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>203</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 203 | Comments: 110 | By: adchurch</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">14</span>
+          <div class="title"><a href="https://old.reddit.com/r/LocalLLaMA/comments/1ufo0un/us_govt_to_individually_approve_who_gets_gpt_56/" target="_blank" rel="noopener">US Govt to individually approve who gets GPT 5.6</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>144</span>
+          <span>old.reddit.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 144 | Comments: 1 | By: theanonymousone</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">15</span>
+          <div class="title"><a href="https://github.com/luongnv89/claude-howto" target="_blank" rel="noopener">luongnv89/claude-howto</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>141</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">A visual, example-driven guide to Claude Code — from basic concepts to advanced agents, with copy-paste templates that bring immediate value. | Language: Python</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">16</span>
+          <div class="title"><a href="https://aditya.patadia.org/p/ai-and-cloud-costs" target="_blank" rel="noopener">Why current LLM costs are not sustainable</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>114</span>
+          <span>aditya.patadia.org</span>
+        </div>
+        
+        <div class="summary">HN Score: 114 | Comments: 192 | By: adityapatadia</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">17</span>
+          <div class="title"><a href="https://github.com/kageroumado/adrafinil" target="_blank" rel="noopener">Show HN: Adrafinil – keep a lid-closed Mac awake only while agents work</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>103</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 103 | Comments: 67 | By: kageroumado</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">18</span>
+          <div class="title"><a href="https://nuage.lix.polytechnique.fr/index.php/apps/forms/s/stfxAj2S2xnqC3aajYjKwtk7" target="_blank" rel="noopener">Beta test TeXmacs on Android</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>60</span>
+          <span>nuage.lix.polytechnique.fr</span>
+        </div>
+        
+        <div class="summary">HN Score: 60 | Comments: 0 | By: amichail</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">19</span>
+          <div class="title"><a href="https://techcrunch.com/2026/06/25/the-white-house-is-asking-openai-to-slow-roll-the-release-of-its-new-model-over-safety-concerns/" target="_blank" rel="noopener">The White House is asking OpenAI to slow roll the release of its new model</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>48</span>
+          <span>techcrunch.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 48 | Comments: 13 | By: lucamark</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">20</span>
+          <div class="title"><a href="https://knob.monster/how-do-you-keep-web-midi-from-crashing-a-1983-synthesizer" target="_blank" rel="noopener">How do you keep Web MIDI from crashing a 1983 synthesizer?</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>31</span>
+          <span>knob.monster</span>
+        </div>
+        
+        <div class="summary">HN Score: 31 | Comments: 14 | By: halfradaition</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">21</span>
+          <div class="title"><a href="https://36kr.com/p/3869740772316162?f=rss" target="_blank" rel="noopener">G7易流发布货运行业首款穿戴式AI硬件「拍拍豆」，填平物流交付的“最后两米”｜最前线</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">作者｜黄楠 编辑｜袁斯来 6月25日，G7易流发布货运行业首款穿戴式AI硬件“拍拍豆”。这款产品克重仅30克，采用磁吸设计，当车辆熄火停稳后，司机可直接将设备从挡风玻璃底座取下，佩戴于胸前即可自动启动录制；放回底座瞬间，录制文件将自动同步上传云端存储。 从“看见车上”到“看见车下”，物流AI的应用场景正在完成一次关键跨越。 物流行业的AI化进程加速。据中国物流与采购联合会等机构统计，2025年全球物流与供应链管理AI市场规模已超过340亿美元，预计2026年将增长至479.2亿美元，年复合增长率高达40.8%。其中在中国，AI于物流供应链领域的渗透率已超过37% 过去几年，行业花了大量精力把车</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">22</span>
+          <div class="title"><a href="https://36kr.com/p/3870720040588295?f=rss" target="_blank" rel="noopener">9点1氪｜苹果涨价引山姆代购潮；DeepSeek大规模招聘；黄金再度跌破4000美元</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">今日热点导览 OpenAI官宣推出GPT-5.6 亚洲“果链”股价几乎全线大幅下跌 SpaceX计划为美国消费者推出新的星链移动服务 美团股价低迷，王兴回应 小鹏机器人调整：新设九部门，何小鹏兼任产品部负责人 微信回应朋友圈互动规则：单删原封不动，互删清空对方全部痕迹 TOP3大新闻 苹果涨价引山姆代购潮，部分门店已卖断货 近日，社交媒体上多名网友反馈，多地山姆会员超市的iPad及Mac系列产品出现抢购、代购的情况。原因在于，苹果宣布上调iPad及Mac系列产品价格后，山姆超市并未进行价格调整。6月26日，有多名代购称可加价45元至300元不等前往山姆代购，并表示代购需求超级多，店内已基本无货</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">23</span>
+          <div class="title"><a href="https://36kr.com/p/3869838577620231?f=rss" target="_blank" rel="noopener">《走进AIE》，谁是下一个主角</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">一展两地，链接全球 &nbsp; &nbsp;AIE 电子展成为龙头企业的必选舞台 全球智能制造产业加速演进，粤港澳大湾区正成为打造世界级科技展会的核心阵地。2026全球智能制造与电子产品博览会（AIE）依托大湾区完备的产业生态，致力于打造中国智能制造首发平台。 技术创新的源头既来自产业一线的龙头力量，也来自科研院所的前沿探索，更来自真实场景中的实战检验。为此，AIE 组委会联合南方财经、新华网、南方+等权威媒体，重磅推出《走进AIE》专题栏目，全维度挖掘产业、科研与场景应用的创新价值，彰显湾区智造硬实力，吸引全球产业资源加速汇聚。 走进企业，解码产业 用专业内容讲好"中国智造" 围绕行业前沿</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">24</span>
+          <div class="title"><a href="https://36kr.com/p/3866837793952769?f=rss" target="_blank" rel="noopener">对话张亚勤：AI不是泡沫，但AI公司有泡沫</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">文 | 海若镜 访谈 | 海若镜 巴芮 6月盛夏，在清华无锡研究院智能产业创新中心，我们见到了张亚勤院士。他匆匆赶来，一进门，就建议让室内温度降得更低些。 访谈中，聊起当下具身智能、AI投资创业热潮，张亚勤也觉得应该降降温，“更冷静些，不要急躁”。 五年前，张亚勤创建了清华大学智能产业研究院（以下简称AIR)，聚集了多位有AI产业经验的知名教授。据介绍，如今AIR的第一届博士生已经毕业；这里孵化、走出的十家公司，累计“融资约150亿元，估值1500亿元”。其中，华深智药、它石智航等独角兽，在资本市场备受追捧。 1500亿估值是个亮眼数据，但张亚勤却告诉我们：AIR首要任务是做科研；孵化公司只是</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">25</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872321240700160?f=rss" target="_blank" rel="noopener">谷歌对Meta Gemini模型的使用设限，因人工智能需求紧张导致算力吃紧</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">谷歌对Meta Gemini模型的使用设限，因人工智能需求紧张导致算力吃紧。（新浪财经）</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">26</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3871213411128577?f=rss" target="_blank" rel="noopener">具身世界模型“我悟”通过合规备案</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">6月26日，北京人形机器人创新中心慧思开物平台的双大脑模型天鹕（Pelican-VL）和我悟（WoW）同步完成北京市网信办最新一批生成式人工智能服务备案。北京人形将正式启动慧思开物全系列模型Token服务，计划分阶段面向产业客户、科研机构、开发者全面开放API调用能力。（界面新闻）</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">27</span>
+          <div class="title"><a href="https://sspai.com/post/111562" target="_blank" rel="noopener">本周看什么 | 最近值得一看的 10 部作品</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>少数派</span>
+          <span>20</span>
+          <span>sspai.com</span>
+        </div>
+        
+        <div class="summary">📅本周新预告《克拉拉与太阳》首支预告6月23日，电影《克拉拉与太阳》发布了首支预告，将于10月23日在北美上映。塔伊加·维迪提执导，詹娜·奥尔特加、艾米·亚当斯主演，改编自石黑一雄的同名小说，人工智能 ...查看全文</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">28</span>
+          <div class="title"><a href="https://sspai.com/post/100319" target="_blank" rel="noopener">空调续命之外的清凉：这是我们的夏日降温「新」方案</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>少数派</span>
+          <span>20</span>
+          <span>sspai.com</span>
+        </div>
+        
+        <div class="summary">当夏天的热浪席卷城市，北方在烈日下承受着如烤箱般的双面炙烤，南方在骄阳下忍受着如蒸笼般的闷湿高温，能够每天陪伴我们的「降温好物」成为必需。又是一年盛夏时，我们邀请了6位少数派作者，聊聊那些真正融入日常 ...查看全文</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">29</span>
+          <div class="title"><a href="https://sspai.com/post/111297" target="_blank" rel="noopener">林檎越东瀛：苹果的日本之旅</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>少数派</span>
+          <span>20</span>
+          <span>sspai.com</span>
+        </div>
+        
+        <div class="summary">当年「林檎渡东瀛」的试探，终演变成一场与亚洲产业命运相依的交响。查看全文</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">30</span>
+          <div class="title"><a href="https://sspai.com/post/111518" target="_blank" rel="noopener">新玩意 245｜少数派的编辑们最近买了啥？</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>少数派</span>
+          <span>20</span>
+          <span>sspai.com</span>
+        </div>
+        
+        <div class="summary">关于栏目很多读者都会好奇少数派的编辑们到底平时都「买了啥」。我们希望通过「编辑部的新玩意」介绍编辑部成员们最近在用的新奇产品，让他们自己来谈谈这些新玩意的使用体验究竟如何。@克莱德：GoogleSta ...查看全文</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">31</span>
+          <div class="title"><a href="http://www.ruanyifeng.com/blog/2026/06/weekly-issue-399.html" target="_blank" rel="noopener">科技爱好者周刊（第 399 期）：中国 AI 大厂访问记</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>ruanyifeng.com</span>
+          <span>20</span>
+          <span>ruanyifeng.com</span>
+        </div>
+        
+        <div class="summary">这里记录每周值得分享的科技内容，周五发布。...</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">32</span>
+          <div class="title"><a href="https://www.qbitai.com/2026/06/439393.html" target="_blank" rel="noopener">BrowserBC：克隆人类点击，让一次网页操作转化为所有Agent的能力</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>qbitai.com</span>
+          <span>20</span>
+          <span>qbitai.com</span>
+        </div>
+        
+        <div class="summary">人类一次录制，Agent就能模拟</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">33</span>
+          <div class="title"><a href="https://www.qbitai.com/2026/06/439237.html" target="_blank" rel="noopener">第一批一人公司，现在怎么样了？</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>qbitai.com</span>
+          <span>20</span>
+          <span>qbitai.com</span>
+        </div>
+        
+        <div class="summary">我们跟一群OPC创业者聊了聊</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">34</span>
+          <div class="title"><a href="https://www.qbitai.com/2026/06/439236.html" target="_blank" rel="noopener">CVPR 2026最热方向，被一家杭州团队率先跑进了端侧！</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>qbitai.com</span>
+          <span>20</span>
+          <span>qbitai.com</span>
+        </div>
+        
+        <div class="summary">VLM- R1之后再次出手！全球首个端侧流式多模态来了！</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">35</span>
+          <div class="title"><a href="https://www.qbitai.com/2026/06/439032.html" target="_blank" rel="noopener">微软年度AI职场报告：员工已经准备好了，公司还没有</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>qbitai.com</span>
+          <span>20</span>
+          <span>qbitai.com</span>
+        </div>
+        
+        <div class="summary">28页干货爆炸</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">36</span>
+          <div class="title"><a href="https://www.qbitai.com/2026/06/438895.html" target="_blank" rel="noopener">GPT-5.6突然发布！Fable5痛失最强基模王座</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>qbitai.com</span>
+          <span>20</span>
+          <span>qbitai.com</span>
+        </div>
+        
+        <div class="summary">一口气端出三款GPT 5.6系列模型</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">37</span>
+          <div class="title"><a href="https://www.qbitai.com/2026/06/438887.html" target="_blank" rel="noopener">两个月连获两轮数亿元融资 深度机智以全栈自主路线加速国产物理AI基座模型落地</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>qbitai.com</span>
+          <span>20</span>
+          <span>qbitai.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">38</span>
+          <div class="title"><a href="https://www.qbitai.com/2026/06/438848.html" target="_blank" rel="noopener">谷歌「推理之王」也跑路Meta了，当年还是李飞飞挖来的</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>qbitai.com</span>
+          <span>20</span>
+          <span>qbitai.com</span>
+        </div>
+        
+        <div class="summary">Coding为王</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">39</span>
+          <div class="title"><a href="https://www.qbitai.com/2026/06/438789.html" target="_blank" rel="noopener">Claude Fable 5分批重新上线！GPT-5.6秒跟</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>qbitai.com</span>
+          <span>20</span>
+          <span>qbitai.com</span>
+        </div>
+        
+        <div class="summary">这不能是营销计划的一部分吧？</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">40</span>
+          <div class="title"><a href="https://www.qbitai.com/2026/06/438741.html" target="_blank" rel="noopener">华勤技术与正行创新达成战略合作，加速机器人“走进工厂、走上产线”</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>qbitai.com</span>
+          <span>20</span>
+          <span>qbitai.com</span>
+        </div>
+        
+        <div class="summary">共建工业物理智能“数据底座与智能大脑”</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">41</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870980.html?f=rss" target="_blank" rel="noopener">本周AI 项目推荐：Link、Agentic Wallets、Token Pay......Token支付底座长啥样</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">42</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870975.html?f=rss" target="_blank" rel="noopener">AI算力链，日本从头卡到尾</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">43</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870971.html?f=rss" target="_blank" rel="noopener">世界模型、元宇宙、数字孪生、物理AI：它们是一回事吗？</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">44</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870967.html?f=rss" target="_blank" rel="noopener">3小时，蒸发200万：一个AI客服引发的灾难</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">45</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870953.html?f=rss" target="_blank" rel="noopener">白嫖AI的日子，彻底结束了</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+        <div class="summary">互联网时代以免费为底色靠流量与广告完成价值循环，步入智能时代，直接付费必将回归主流</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">46</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870959.html?f=rss" target="_blank" rel="noopener">“AI投毒”正在成为传统公关的灭顶之灾</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">47</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870958.html?f=rss" target="_blank" rel="noopener">中国AI权力榜，梁文锋百度阿里腾讯华为们正在卡向这七个位置</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">48</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870954.html?f=rss" target="_blank" rel="noopener">脑子还在发烫，和两位AI大神聊完，邻桌的帅哥终于忍不住了……</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">49</span>
+          <div class="title"><a href="https://www.producthunt.com/products/folio-ai" target="_blank" rel="noopener">Folio AI</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Claude for PowerPoint, on steroids Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">50</span>
+          <div class="title"><a href="https://www.producthunt.com/products/cubeone" target="_blank" rel="noopener">AI Slide Editor by CubeOne</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">The editor PowerPoint should've shipped Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">51</span>
+          <div class="title"><a href="https://www.producthunt.com/products/gemini-spark" target="_blank" rel="noopener">Gemini Spark</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Your 24/7 personal AI agent Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">52</span>
+          <div class="title"><a href="https://www.producthunt.com/products/nanonets" target="_blank" rel="noopener">Atlas</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Every AI tool you use should know how your company works Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">53</span>
+          <div class="title"><a href="https://www.producthunt.com/products/lockin-mcp" target="_blank" rel="noopener">LockIn MCP</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Let AI block distractions for you when you need to lock in Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">54</span>
+          <div class="title"><a href="https://www.producthunt.com/products/dmv-department-of-machine-verification" target="_blank" rel="noopener">DMV by Agent Community</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">A community-governed namespace for AI agents Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">55</span>
+          <div class="title"><a href="https://www.producthunt.com/products/squidhub" target="_blank" rel="noopener">SquidHub</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Multiplayer mode for humans and AI Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">56</span>
+          <div class="title"><a href="https://www.producthunt.com/products/modulex" target="_blank" rel="noopener">ModuleX</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">AI workspace that’s already connected to everything Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">57</span>
+          <div class="title"><a href="https://www.producthunt.com/products/agent-arena" target="_blank" rel="noopener">Agent Arena</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">The first public arena for AI agents Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">58</span>
+          <div class="title"><a href="https://www.producthunt.com/products/grass-claude-code-from-your-phone" target="_blank" rel="noopener">Grass 2.0</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">The always-on computer for your coding agents Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">59</span>
+          <div class="title"><a href="https://www.producthunt.com/products/tough-tongue-ai-2" target="_blank" rel="noopener">Tough Tongue AI for Sales</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Live AI teammate for every tough sales conversation Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">60</span>
+          <div class="title"><a href="https://www.producthunt.com/products/clickup" target="_blank" rel="noopener">Brain² by ClickUp</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">One AI that knows your entire company and acts on it Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">61</span>
+          <div class="title"><a href="https://www.producthunt.com/products/sendtidings" target="_blank" rel="noopener">SendTidings</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Turn your analytics into beautiful monthly email reports Discussion | Link</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="体育竞技">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      ⚽ 体育竞技
+      <span class="count">(26)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2054498128321929989" target="_blank" rel="noopener">韩国队无缘晋级 2026 年世界杯淘汰赛，小组赛出局最大的问题是什么？谁该负责？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">韩国队2026世界杯小组赛出局，1胜2负积3分，近4届3次无缘淘汰赛。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2054242585875412186" target="_blank" rel="noopener">葡萄牙 0-0 战平哥伦比亚，位居 K 组第 2 名出线，如何评价本场比赛？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">葡萄牙0-0战平哥伦比亚，小组第二出线，淘汰赛将战克罗地亚。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2054243110960324628" target="_blank" rel="noopener">阿根廷 3-1 约旦，小组赛全胜头名晋级，如何评价本场比赛？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">阿根廷3-1胜约旦，小组赛全胜头名晋级，约旦垫底出局。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">4</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2054243318549018449" target="_blank" rel="noopener">神剧情！阿尔及利亚 3-3 奥地利携手出线，卡拉季奇绝平，如何评价本场比赛？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">阿尔及利亚3-3奥地利，卡拉季奇绝平，两队携手出线。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">5</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2054242044856328322" target="_blank" rel="noopener">英格兰 2-0 击败巴拿马，小组头名出线，凯恩独享英格兰队史世界杯射手王，如何评价本场比赛？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">英格兰2-0胜巴拿马，小组头名出线，凯恩成队史世界杯射手王。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">6</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2054242306442490679" target="_blank" rel="noopener">克罗地亚 2-1 加纳，小组第二出线，如何评价本场比赛？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">克罗地亚2-1胜加纳，小组第二出线，莫德里奇助攻弗拉希奇头球制胜。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">7</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=世界杯32强全名单" target="_blank" rel="noopener">世界杯32强全名单</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">世界杯32强名单公布，引发广泛关注。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">8</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=阿根廷任意球破门" target="_blank" rel="noopener">阿根廷任意球破门</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">阿根廷队在比赛中通过任意球破门得分，引发热议。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">9</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=C罗倒钩被挡" target="_blank" rel="noopener">C罗倒钩被挡</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">C罗倒钩射门被对手挡出，引发热议。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">10</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=佛得角队长被曝因强奸指控接受调查" target="_blank" rel="noopener">佛得角队长被曝因强奸指控接受调查</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">佛得角队长因强奸指控接受调查，引发关注。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">11</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=吴艳妮睡过头素颜去比赛" target="_blank" rel="noopener">吴艳妮睡过头素颜去比赛</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">运动员吴艳妮因睡过头素颜参赛引发热议。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">12</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=阿根廷世界杯首个丢球" target="_blank" rel="noopener">阿根廷世界杯首个丢球</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">阿根廷在世界杯比赛中首次失球，引发热议。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">13</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E4%BC%8A%E6%9C%97%E9%98%9F%E6%9C%80%E5%90%8E%E6%97%B6%E5%88%BB%E5%87%BA%E5%B1%80&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">伊朗队最后时刻出局</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">世界杯小组赛结束，伊朗队最后时刻遗憾出局。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">14</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E4%B8%96%E7%95%8C%E6%9D%AF32%E5%BC%BA%E5%85%A8%E9%83%A8%E5%87%BA%E7%82%89&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">世界杯32强全部出炉</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">2026年世界杯32强全部确定，约旦和阿尔及利亚完成最后比赛。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">15</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E9%9F%A9%E5%9B%BD%E9%98%9F%E5%87%BA%E5%B1%80&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">韩国队出局</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">韩国队因民主刚果队逆转晋级，被挤出小组第三积分榜前八，无缘世界杯淘汰赛。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">16</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E4%B9%8C%E6%8B%89%E5%9C%AD%E9%98%9F%E5%8F%96%E6%B6%88%E5%8C%85%E6%9C%BA+%E7%90%83%E5%91%98%E5%B0%86%E8%87%AA%E8%A1%8C%E8%BF%94%E7%A8%8B&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">乌拉圭队取消包机 球员将自行返程</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">乌拉圭队因小组赛出局，取消包机让球员自行返程。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">17</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E9%9F%A9%E7%90%83%E8%BF%B7%E7%A7%B0%E5%87%86%E5%A4%87%E5%8E%BB%E4%BB%81%E5%B7%9D%E6%9C%BA%E5%9C%BA%E6%89%94%E9%B8%A1%E8%9B%8B&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">韩球迷称准备去仁川机场扔鸡蛋</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">韩国球迷因世界杯出局愤怒，计划去仁川机场扔鸡蛋抗议国家队。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">18</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E9%9F%A9%E5%9B%BD%E7%90%83%E8%BF%B7%E7%BB%88%E4%BA%8E%E8%A7%A3%E8%84%B1%E4%BA%86&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">韩国球迷终于解脱了</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">韩国队因刚果金积分优势被挤出世界杯32强，球迷等待落空。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">19</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E5%90%B4%E8%89%B3%E5%A6%AE%E9%A2%84%E8%B5%9B%E7%9D%A1%E8%BF%87%E5%A4%B4%E7%B4%A0%E9%A2%9C%E4%B8%8A%E5%9C%BA&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">吴艳妮预赛睡过头素颜上场</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">吴艳妮预赛睡过头素颜上场仍夺冠，决赛12秒99锁定亚运资格。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">20</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E6%9C%AC%E5%B1%8A%E4%B8%96%E7%95%8C%E6%9D%AF%E5%94%AF%E4%B8%80%E9%9B%B6%E8%BF%9B%E7%90%83%E7%9A%84%E7%90%83%E9%98%9F&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">本届世界杯唯一零进球的球队</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">巴拿马三战全败零进球，成世界杯唯一未进球队伍。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">21</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656292017286270490" target="_blank" rel="noopener">一图速览世界杯32强</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第7名 · 6091239</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">22</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7655263121331339306" target="_blank" rel="noopener">世界杯又出“脚尖越位”</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第16名 · 2476513</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">23</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656277499273854995" target="_blank" rel="noopener">C罗世界杯赛场频演“老友记”</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第19名 · 1834646</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">24</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656232487638732314" target="_blank" rel="noopener">莫德里奇创世界杯最年长助攻纪录</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第22名 · 1359139</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">25</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656283970270691371" target="_blank" rel="noopener">迈阿密的足球暂停了片刻</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第25名 · 1006875</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">26</span>
+          <div class="title"><a href="http://www.ruanyifeng.com/blog/2026/06/weekly-issue-400.html" target="_blank" rel="noopener">科技爱好者周刊（第 400 期）：rsync 的争论</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>ruanyifeng.com</span>
+          <span>20</span>
+          <span>ruanyifeng.com</span>
+        </div>
+        
+        <div class="summary">这里记录每周值得分享的科技内容，周五发布。（[通知] 下周端午假期，周刊休息。）...</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="社会热点">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      🔥 社会热点
+      <span class="count">(33)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2054316615341007572" target="_blank" rel="noopener">如何看待奔驰将取消德国9万名员工年终奖，并计划延长工作时间且不支付补偿性报酬？奔驰当下处于什么境况？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">奔驰因经济困难取消9万德国员工年终奖并拟延长工时，引发劳资争议。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2053778417024340082" target="_blank" rel="noopener">委内瑞拉发生百年最强地震造成 1430 人遇难，中国公民遇难人数升至 8 人，本次灾害为何破坏力巨大？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">委内瑞拉百年强震致1430人遇难，含8名中国公民，余震频繁破坏力巨大。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2054263250850669356" target="_blank" rel="noopener">人大博士肄业宅家六年靠父母供养，曾确诊焦虑症，为什么会出现这种情况？反映了哪些问题？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">人大博士因科研压力肄业，宅家六年靠父母供养，反映高学历者心理困境与家庭关系问题。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">4</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2053468017514602830" target="_blank" rel="noopener">央视曝光高考志愿填报咨询陷阱，资质造假、照着AI念，高考志愿咨询服务是智商税吗？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">央视曝光高考志愿咨询乱象，资质造假、AI敷衍，质疑其是否为智商税。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">5</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2053123761063436729" target="_blank" rel="noopener">山东一动物园将小狗染成「熊猫犬」展出，园方回应染色剂合规且无风险，真的对动物无害吗？为啥用狗扮演熊猫？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">山东动物园将小狗染成熊猫犬展出，园方称染色剂合规，引发动物福利争议。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">6</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2052411705146267584" target="_blank" rel="noopener">孩子涂完防晒在暗处全身散发荧光绿，品牌称产品安全，有成分在灯光下有荧光反应，可能是啥成分？真的安全吗？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">孩子涂防晒后全身发光引关注，品牌称安全，成分在荧光灯下反应。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">7</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2054090943784133053" target="_blank" rel="noopener">如何看待开店博主「勇哥餐饮创业说」由于直播间被判定违规，对线短视频平台客服被挂断电话？</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">博主因直播违规与平台客服对线被挂断电话，引发对平台规则和客服态度的讨论。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">8</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2054471851032539301" target="_blank" rel="noopener">美军连续第二天空袭伊朗，特朗普威胁伊朗或将不复存在，局势会再度持续升温吗？美方此轮袭击想达成哪些目标？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">美军连续空袭伊朗，特朗普威胁伊朗，局势可能持续升温。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">9</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2054137162698957150" target="_blank" rel="noopener">谅解备忘录签署后美伊再起冲突，美军以新加坡籍货船遇袭为由打击伊朗，伊朗打击美军驻点，如何看待当前局势？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">美伊谅解备忘录后冲突再起，美军打击伊朗设施，伊朗反击，局势紧张。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">10</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2050514813688850091" target="_blank" rel="noopener">高考结束了，你会让孩子在家玩手机吗？</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">探讨高考后是否应限制孩子玩手机，引发家长讨论。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">11</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2037198195294462384" target="_blank" rel="noopener">为什么韩国生育率起来了?</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">探讨韩国生育率回升的原因及影响因素。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">12</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=伊朗出局" target="_blank" rel="noopener">伊朗出局</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">伊朗相关事件引发微博热搜，热度高。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">13</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=诋毁袁隆平成果网红称大不了就进去" target="_blank" rel="noopener">诋毁袁隆平成果网红称大不了就进去</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">网红诋毁袁隆平科研成果，引发公众愤怒和热议。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">14</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=200万粉网红诋毁袁隆平水稻育种技术" target="_blank" rel="noopener">200万粉网红诋毁袁隆平水稻育种技术</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">网红诋毁袁隆平水稻育种技术引热议，公众强烈谴责。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">15</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=结婚的时候没想到我天天回来吧" target="_blank" rel="noopener">结婚的时候没想到我天天回来吧</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">微博热搜话题，讨论婚姻生活中的日常现象。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">16</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=韩国淘汰" target="_blank" rel="noopener">韩国淘汰</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">韩国相关话题登上微博热搜，引发广泛关注。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">17</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=女儿毕业寄回几百斤包裹妈妈天塌了" target="_blank" rel="noopener">女儿毕业寄回几百斤包裹妈妈天塌了</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">女儿毕业寄回大量包裹，妈妈面对堆积如山的物品感到崩溃。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">18</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=韩媒破防了" target="_blank" rel="noopener">韩媒破防了</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">韩媒对中国某事件反应强烈，引发微博热搜关注。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">19</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=老板暂停营业奉旨入京" target="_blank" rel="noopener">老板暂停营业奉旨入京</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">老板暂停营业奉旨入京成为微博热搜话题，引发广泛关注。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">20</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=美军对伊朗实施新一轮打击" target="_blank" rel="noopener">美军对伊朗实施新一轮打击</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">美军对伊朗实施新一轮打击，引发国际关注。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">21</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=生命树又获奖了" target="_blank" rel="noopener">生命树又获奖了</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">生命树再次获奖，登上微博热搜第29名，引发广泛关注。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">22</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=刘宇宁依赖摇最严厉的父亲" target="_blank" rel="noopener">刘宇宁依赖摇最严厉的父亲</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">刘宇宁因依赖摇事件引发热议，其父亲态度严厉成为焦点。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">23</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E5%BE%B7%E5%9B%BD%E4%BA%BA%E4%B8%BA%E6%8A%A2%E4%B8%AD%E5%9B%BD%E7%A9%BA%E8%B0%83%E5%BC%80%E5%A7%8B%E6%B0%AA%E9%87%91%E4%BA%86&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">德国人为抢中国空调开始氪金了</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">德国高温致国产移动空调脱销，开发者建付费通知站抢购。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">24</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E4%B8%89%E6%88%98%E9%AB%98%E8%80%83%E5%A5%B3%E5%AD%A9%E6%9F%A5%E5%88%86%E5%A4%A7%E5%93%AD%E7%9C%8B%E5%93%AD%E7%BD%91%E5%8F%8B&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">三战高考女孩查分大哭看哭网友</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">山东女生三战高考终圆梦，查分大哭引网友共情。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">25</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E5%BD%9D%E6%97%8F%E5%A7%91%E5%A8%98%E6%9F%A5%E5%88%86%E5%90%8E%E5%96%82%E7%8C%AA+%E5%BF%83%E4%BB%AA%E5%A4%A7%E5%AD%A6%E5%9B%9E%E5%BA%94%E4%BA%86&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">彝族姑娘查分后喂猪 心仪大学回应了</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">彝族女孩高考620分后喂猪，武汉大学欢迎其报考。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">26</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E2%80%9C%E7%94%B7%E5%AD%90%E5%85%A8%E8%BA%AB%E8%A2%AB%E7%86%8F%E9%BB%91%E7%96%91%E9%81%AD%E9%9B%B7%E5%87%BB%E2%80%9D%E4%B8%8D%E5%AE%9E&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">“男子全身被熏黑疑遭雷击”不实</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">四川男子被误传遭雷击，实为鞭炮炸伤。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">27</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E4%BC%8A%E6%9C%97%EF%BC%9A%E6%89%93%E5%87%BB8%E5%A4%84%E7%BE%8E%E5%86%9B%E8%AE%BE%E6%96%BD&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">伊朗：打击8处美军设施</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">伊朗宣布打击8处美军设施，引发国际关注。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">28</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E9%9F%A9%E5%AA%92%E6%B0%94%E5%88%B0%E7%BB%99%E4%B8%BB%E5%B8%85%E6%89%93%E7%A0%81&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">韩媒气到给主帅打码</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">韩媒KBS给国家队主帅洪明甫采访画面打码，引发争议。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">29</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E5%8F%AA%E5%89%A9%E6%A0%91%E5%B9%B2%E7%9A%84%E8%8A%92%E6%9E%9C%E6%A0%91%E9%95%BF%E5%87%BA%E4%B8%B0%E7%9B%9B%E6%9E%9C%E5%AE%9E&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">只剩树干的芒果树长出丰盛果实</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">广东一棵被围困的芒果树顽强结果，引发网友对生命力的赞叹。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">30</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E6%B2%B3%E5%8D%97%E7%9C%81%E5%A7%94%E4%B9%A6%E8%AE%B0%E7%9C%8B%E6%9C%9B%E7%8E%8B%E5%A6%99%E4%B8%BD&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">河南省委书记看望王妙丽</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">河南省委书记看望党员代表王妙丽，致以节日问候。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">31</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E5%B0%8F%E9%A9%AC%E8%A2%AB%E6%B8%B8%E5%AE%A2%E6%97%A0%E4%BA%BA%E6%9C%BA%E6%83%8A%E6%89%B0+%E7%8B%82%E5%A5%94%E7%82%B8%E8%82%BA%E6%AD%BB%E4%BA%A1&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">小马被游客无人机惊扰 狂奔炸肺死亡</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">游客无人机惊扰小马致其狂奔炸肺死亡，引发关注。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">32</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E6%9C%AA%E6%9D%A55%E5%B9%B4+%E5%85%85%E7%94%B5%E4%BE%9B%E7%83%AD%E4%BE%9B%E6%9A%96%E5%B0%86%E6%9C%89%E5%A4%A7%E5%8F%98%E5%8C%96&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">未来5年 充电供热供暖将有大变化</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">《新型能源体系建设“十五五”规划》提出，提高民生用能电气化水平，2030年人均年生活用电量达到1500千瓦时。未来5年，咱老百姓用电、供热、供暖有啥变化，一起看。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">33</span>
+          <div class="title"><a href="https://www.climate.us/" target="_blank" rel="noopener">Ex-NOAA employees laid off by DOGE rebuilt climate website</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>39</span>
+          <span>climate.us</span>
+        </div>
+        
+        <div class="summary">HN Score: 39 | Comments: 3 | By: vincentchau</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="娱乐影视">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      🎬 娱乐影视
+      <span class="count">(18)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2053095286239760746" target="_blank" rel="noopener">为什么成龙拍了好几部扑街烂片，依旧新片不断；而周星驰在《新喜剧之王》后，就七年没有新片上映?</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">分析成龙与周星驰近年电影产出差异的原因</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://www.zhihu.com/question/300940530" target="_blank" rel="noopener">什么事情让你意识到这个剧组原来真没钱了？</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">讨论剧组预算紧张的有趣细节和幕后故事。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2054315547337270453" target="_blank" rel="noopener">如何评价《异环》1.2版本前瞻？</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">《异环》1.2版本前瞻内容评价，聚焦游戏更新与玩家反馈。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">4</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=玩家回应恋与深空回应" target="_blank" rel="noopener">玩家回应恋与深空回应</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">玩家对《恋与深空》官方回应做出反应，引发微博热搜。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">5</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=黄灿灿拿到全季通告费" target="_blank" rel="noopener">黄灿灿拿到全季通告费</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">黄灿灿获得全季通告费，登上微博热搜第七名。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">6</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=浪姐结束各回各咖" target="_blank" rel="noopener">浪姐结束各回各咖</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">浪姐节目结束后，嘉宾们回归各自原有咖位。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">7</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=李现 杨紫" target="_blank" rel="noopener">李现 杨紫</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">李现和杨紫相关话题登上微博热搜第11名，热度较高。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">8</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=迪丽热巴江坂丽奈美甲" target="_blank" rel="noopener">迪丽热巴江坂丽奈美甲</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">迪丽热巴与江坂丽奈的美甲话题登上微博热搜，引发网友关注。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">9</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=宁艺卓黑丝绒抹胸长裙" target="_blank" rel="noopener">宁艺卓黑丝绒抹胸长裙</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">宁艺卓穿黑丝绒抹胸长裙登上微博热搜，引发关注。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">10</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=黄灿灿 曾沛慈" target="_blank" rel="noopener">黄灿灿 曾沛慈</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">黄灿灿和曾沛慈登上微博热搜，引发关注。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">11</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=孙怡忘了自己33岁了" target="_blank" rel="noopener">孙怡忘了自己33岁了</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">孙怡在微博上忘记自己33岁，引发网友热议。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">12</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=恋与深空" target="_blank" rel="noopener">恋与深空</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">恋与深空登微博热搜第24名，热度达349521。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">13</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=赵丽颖并非无戏可拍" target="_blank" rel="noopener">赵丽颖并非无戏可拍</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">赵丽颖否认无戏可拍传闻，引发网友热议。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">14</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656060507769733126" target="_blank" rel="noopener">郑州近期演唱会排期</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第17名 · 2240841</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">15</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656082012856025115" target="_blank" rel="noopener">孙浩被邀请去看谢霆锋演唱会</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第21名 · 1502081</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">16</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872220264879105?f=rss" target="_blank" rel="noopener">《给阿嬷的情书》总票房已突破19亿元</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">据网络平台数据，截至6月27日16时17分，上映59天的电影《给阿嬷的情书》总票房已突破19亿元。此前，该片官宣密钥延期，延长放映至7月31日。（上海证券报）</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">17</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872144382432257?f=rss" target="_blank" rel="noopener">暑期档电影票房破15亿 80部影片集结暑期档</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">据网络平台数据，截至目前，2026年暑期档电影总票房（含预售）突破15亿元。近日，2026暑期档电影片单发布，近80部中外影片在暑期档上映，包含革命历史、科幻、喜剧、动画等多元类型。（央视财经）</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">18</span>
+          <div class="title"><a href="https://www.producthunt.com/products/nada-2" target="_blank" rel="noopener">Nada</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Compose music with just your voice Discussion | Link</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="航天科技">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      🚀 航天科技
+      <span class="count">(4)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2053970381673861771" target="_blank" rel="noopener">美国海军陆战队接收首批「无雷达」F-35，没有雷达在现代战争中意味着什么？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">美国海军陆战队接收无雷达F-35，因新雷达测试延迟，引发对现代战争影响的讨论。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=全球最大人造太阳超导磁体在中国" target="_blank" rel="noopener">全球最大人造太阳超导磁体在中国</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">中国建成全球最大人造太阳超导磁体，推动核聚变能源研究。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E2%80%9C%E4%BA%BA%E9%80%A0%E5%A4%AA%E9%98%B3%E2%80%9D%E5%8F%96%E5%BE%97%E9%87%8D%E8%A6%81%E7%AA%81%E7%A0%B4&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">“人造太阳”取得重要突破</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">中国“人造太阳”项目取得突破，核心磁体性能达国际领先。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">4</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870984.html?f=rss" target="_blank" rel="noopener">太空算力的国产答案：用光子更高效，马斯克和老黄都太绕了</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="人文社科">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      📚 人文社科
+      <span class="count">(6)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2054203043105567686" target="_blank" rel="noopener">北大哲学系主任程乐松的毕业致辞为什么火了？给你带来了哪些触动？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">北大哲学系主任程乐松毕业致辞引发共鸣，探讨离别与成长的意义。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://www.zhihu.com/question/508550781" target="_blank" rel="noopener">孙尚香被骗回东吴之后，为什么不再返回到刘备身边了？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">分析孙尚香被骗回东吴后不返刘备身边的历史原因与人物心理。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2046194083283182692" target="_blank" rel="noopener">大量外来词汇涌入中文，这会威胁到汉语的纯洁性吗？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">探讨外来词汇对中文纯洁性的影响，分析语言丰富与文化警惕的平衡。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">4</span>
+          <div class="title"><a href="https://sspai.com/post/111347" target="_blank" rel="noopener">俄西双城游记：莫斯科时代折叠，圣彼得堡文化巡礼</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>少数派</span>
+          <span>20</span>
+          <span>sspai.com</span>
+        </div>
+        
+        <div class="summary">在莫斯科的时代折叠与彼得堡的文化巡礼之间，发现俄罗斯的不同面貌。查看全文</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">5</span>
+          <div class="title"><a href="https://sspai.com/post/111349" target="_blank" rel="noopener">风暖鸟声碎，日高花影重：我的昆明与腾冲行记</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>少数派</span>
+          <span>20</span>
+          <span>sspai.com</span>
+        </div>
+        
+        <div class="summary">云南气候实在是太好了，昆明海拔将近两千，每次出门都有一种凉爽感包裹全身。而腾冲太适合旅居了，既有中高端的酒店可供享受奢靡之风，也有历史文化供我们反思来时的路，更好的去面对未来，还有拿上衣服就可以随地大小泡的温泉，美哉！查看全文</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">6</span>
+          <div class="title"><a href="https://www.producthunt.com/products/epilogue-book-writing-app" target="_blank" rel="noopener">Epilogue. Write novels, scripts & poetry</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">The professional book writing app built for serious authors Discussion | Link</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="健康医疗">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      🏥 健康医疗
+      <span class="count">(1)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2053831515008496055" target="_blank" rel="noopener">网友称千万别买路边切好的半个西瓜，是细菌「培养皿」，真是这样吗？鲜切西瓜有什么健康隐患？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">探讨路边切好的半个西瓜的细菌风险及健康隐患。</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="教育学习">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      🎓 教育学习
+      <span class="count">(3)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://www.zhihu.com/question/14594933986" target="_blank" rel="noopener">有清北的实力却只考了大专，在大学怎么平衡心态？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">探讨有清北实力却只考上大专的学生如何调整心态和规划大学生活。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2050822597189842279" target="_blank" rel="noopener">为什么有些小学生对「找规律」题感到特别困惑？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">探讨小学生对找规律题感到困惑的原因及解决方法。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656259243810127914" target="_blank" rel="noopener">当过兵的大学生毕业典礼自带气场</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第18名 · 2027597</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="商业创投">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      💰 商业创投
+      <span class="count">(11)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2053876477876347476" target="_blank" rel="noopener">苹果和美光关于存储涨价的口水战，你认为谁说的更有道理？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">苹果与美光就存储涨价互相指责，分析苹果压价策略影响供应。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://github.com/Fission-AI/OpenSpec" target="_blank" rel="noopener">Fission-AI/OpenSpec</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>GitHub Trending</span>
+          <span>177</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">Spec-driven development (SDD) for AI coding assistants. | Language: TypeScript</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://www.bbc.com/news/articles/c74yn7v7k4qo" target="_blank" rel="noopener">Long Wave radio era set to end with switch-off</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>82</span>
+          <span>bbc.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 82 | Comments: 1 | By: speckx</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">4</span>
+          <div class="title"><a href="https://36kr.com/p/3871109381035011?f=rss" target="_blank" rel="noopener">秋声 | 大秦储能冲港股IPO：锂价50万山顶囤货血泪史，亏本三年才清完</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">本文约2500字，建议阅读5分钟 作者&nbsp;|&nbsp;彭孝秋 编者按：AI 大爆发之际，越来越多公司走向资本市场。每一份招股书翻动的声音里，都藏着一家公司想说与未曾明说的全部。 鉴于此，硬氪特推出「秋声」专栏。秋声取自欧阳修《秋声赋》，借“听秋声”之意，观产业冷暖，辨公司成色，记录企业冲刺 IPO 途中那些被写下与被隐藏的真实。这是我们第三期，大秦数字能源。 6月26日，储能公司大秦数字能源向港交所递交了上市申请。 2025年，大秦数字能源收入25.25亿元，同比增长244.3%；毛利率从2024年的-19.9%反弹到23.2%；净利润由2024年的亏3.78亿元转为盈利1.25亿。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">5</span>
+          <div class="title"><a href="https://36kr.com/p/3869884559332356?f=rss" target="_blank" rel="noopener">氪星晚报 ｜智元旗下灵巧手估值10亿美元，成立仅5个月首季实现盈利；DeepSeek计划将所有部门规模扩大至少一倍</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">大公司： 五粮液：曾从钦无法正常履职离任，选举邓敏为公司董事长 36氪获悉，五粮液公告，因曾从钦无法正常履职，公司于2026年6月26日召开2025年度股东会，审议通过《关于免去董事及补选第七届董事会非独立董事的议案》，自本次股东会审议通过之日起，曾从钦不再担任公司董事职务，其担任的董事长、董事会专门委员会主任委员及委员职务一并自动解除（原定任期至公司第七届董事会日期届满之日即2028年6月19日止），离任后不在公司及控股子公司任职，其离任不会对公司正常经营产生影响。截至本公告披露日，曾从钦未持有公司股份，不存在应当履行而未履行的承诺事项。 京东大药房在烟台成立新公司 36氪获悉，天眼查App</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">6</span>
+          <div class="title"><a href="https://36kr.com/p/3869622921041156?f=rss" target="_blank" rel="noopener">中科闻歌开盘暴涨81%，北京再增一家硬科技IPO</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">本文约900字，建议阅读2分钟 作者&nbsp;|&nbsp;彭孝秋 6月26日，中科闻歌（01956.HK）正式在港交所主板敲钟上市。开盘涨81.2%，报110港元，市值190亿港元。截至发稿，盘中最高125港元、最低110港元，振幅收窄至24.71%，换手率2.21%。按现价，一手账面浮盈1.08万港元，公司市值198.37港元。 关于中科闻歌深度报道，可查看此前报道——中科院博士冲上市，市值超105亿港币。 在昨日下午先行的暗盘中，其以115.40港元收盘，较发行价60.70港元大涨90.12%，对应市值199.76亿港元（约合人民币175亿）。按每手200股算，一手账面浮盈约1.09万</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">7</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872215366292738?f=rss" target="_blank" rel="noopener">暑期机票预订量环比增长65%，航司优化航线提前布局</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">全国暑运即将开始，民航方面，从目前的旅客预订情况来看，长线深度游和清凉避暑游成为今年暑期出行的两大主线，西北、东北等目的地热度持续攀升，机票预订量迎来大幅增长。去哪儿大数据研究院研究员石珂表示，截至目前，近一周预订7月至8月暑期出行的机票明显增长，环比上周增长65%。山西大同、贵州铜仁、西藏拉萨、内蒙古乌海、新疆和田的暑期机票预订增幅都达到50%以上。面对今年暑期长线游与避暑游交织的旺盛市场需求，各大航空公司正积极优化航线网络，通过加密热门目的地航班、投入宽体机型等方式精准增加运力供给，全力保障旅客暑期出行需求。（央视财经）</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">8</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872141380080643?f=rss" target="_blank" rel="noopener">华泰证券：5月工业企业利润总体向好，行业分化加剧</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">华泰证券研报称，5月工业企业盈利增速较4月的24.7%略回落至21.1%，但仍高于一季度的15.5%且营收增速延续回升，显示企业盈利总体向好，其中能源及AI链相关行业为利润增长的主要支撑，而随着霍尔木兹海峡封锁超过三个月，供给冲击的影响深化，部分中下游企业产能利用率进一步走弱，行业盈利表现分化加剧。5月油价边际回落但整体上游石化链盈利增速仍在高位，而受益于全球AI投资需求强劲，电子计算机行业持续引领盈利及收入增长，对总体工业企业盈利的贡献从6.7个百分点提升至9.6个百分点，有色冶炼及化学制品分别贡献6.4、4.2个百分点，三者合计贡献约20.2个百分点，而内需相关下游制造业，利润增速仍偏弱，</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">9</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872139558507784?f=rss" target="_blank" rel="noopener">今年前五个月我国物流需求平稳增长，社会物流总额超146万亿元</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">中国物流与采购联合会今天公布今年1到5月物流运行数据。物流需求总体保持平稳增长，新旧动能加快转换，结构升级态势持续显现。1—5月份，全国社会物流总额146.6万亿元，同比增长5.2%。其中，工业品物流总额同比增长5.4%。行业分化特征持续显现，采矿、非金属矿物制品业等传统资源类物流需求持续低位运行，而随着新质生产力加快培育，高端制造领域物流需求保持较快增长。5月份，高技术制造业相关物流需求同比增长15.1%，装备制造业相关物流需求同比增长9.5%，较上月均有所加快。（财联社）</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">10</span>
+          <div class="title"><a href="http://www.ruanyifeng.com/blog/2026/06/weekly-issue-401.html" target="_blank" rel="noopener">科技爱好者周刊（第 401 期）：如何赚到10亿美元</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>ruanyifeng.com</span>
+          <span>20</span>
+          <span>ruanyifeng.com</span>
+        </div>
+        
+        <div class="summary">这里记录每周值得分享的科技内容，周五发布。...</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">11</span>
+          <div class="title"><a href="https://www.producthunt.com/products/cewsco" target="_blank" rel="noopener">Cewsco</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">All-in-one AI assistant — chat, images, voice & market data Discussion | Link</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="消费电子">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      📱 消费电子
+      <span class="count">(30)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2053913023874430201" target="_blank" rel="noopener">中国「避暑神器」美的 PortaSplit 空调有什么特别？为什么能在欧洲卖爆？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">美的PortaSplit空调因适配欧洲住宅限制和高温需求，在欧洲热销脱销。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://www.zhihu.com/question/2054233145457874875" target="_blank" rel="noopener">报道称苹果游说美国政府希望获批采购长鑫存储内存芯片，成功概率有多大？国产芯片打入苹果高端机型难点在哪？</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>知乎热榜</span>
+          <span>300</span>
+          <span>zhihu.com</span>
+        </div>
+        
+        <div class="summary">苹果游说美国政府采购长鑫存储内存芯片，以缓解涨价压力，但面临政治和技术挑战。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=央视曝手机测评作弊乱象" target="_blank" rel="noopener">央视曝手机测评作弊乱象</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">央视曝光手机测评作弊乱象，引发广泛关注。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">4</span>
+          <div class="title"><a href="https://spectrum.ieee.org/ai-radio-chip-design" target="_blank" rel="noopener">AI learns the “dark art” of RFIC design</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>207</span>
+          <span>spectrum.ieee.org</span>
+        </div>
+        
+        <div class="summary">HN Score: 207 | Comments: 138 | By: Brajeshwar</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">5</span>
+          <div class="title"><a href="https://www.sfwriter.com/wordstar.htm" target="_blank" rel="noopener">WordStar: A Writer's Word Processor (1996)</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>169</span>
+          <span>sfwriter.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 169 | Comments: 92 | By: droidjj</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">6</span>
+          <div class="title"><a href="https://svpow.com/2026/05/15/the-bizarre-headgear-exhibit-at-the-sam-noble-museum-is-incredible/" target="_blank" rel="noopener">The "Bizarre Headgear" exhibit at the Sam Noble museum</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>82</span>
+          <span>svpow.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 82 | Comments: 8 | By: surprisetalk</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">7</span>
+          <div class="title"><a href="https://www.theregister.com/systems/2026/06/25/micron-locks-in-historically-high-memory-prices-for-five-years/5261854" target="_blank" rel="noopener">Micron locks in historically high memory prices for five years</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>82</span>
+          <span>theregister.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 82 | Comments: 77 | By: fauigerzigerk</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">8</span>
+          <div class="title"><a href="https://www.euronews.com/my-europe/2026/06/26/brussels-to-exclude-military-age-ukrainian-men-from-temporary-protection-scheme" target="_blank" rel="noopener">Europe to exclude military-age Ukrainian men from temporary protection scheme</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>62</span>
+          <span>euronews.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 62 | Comments: 19 | By: xchip</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">9</span>
+          <div class="title"><a href="https://github.com/schlae/IBM_MCGA" target="_blank" rel="noopener">IBM MCGA Gate Array Reverse Engineering</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>53</span>
+          <span>github.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 53 | Comments: 8 | By: userbinator</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">10</span>
+          <div class="title"><a href="https://mastodon.social/@Tutanota/116815262001889776" target="_blank" rel="noopener">Tuta: They are bringing back ChatControl</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>43</span>
+          <span>mastodon.social</span>
+        </div>
+        
+        <div class="summary">HN Score: 43 | Comments: 6 | By: nickslaughter02</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">11</span>
+          <div class="title"><a href="https://36kr.com/p/3866946087867394?f=rss" target="_blank" rel="noopener">理想首谈电池品牌争议：不管谁家电池，都是理想汽车兜底</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">图源视觉中国 动力电池一直是新能源汽车里高频博弈的战场。 它通常占据一辆新能源车30%-40%的BOM（物料）成本；与此同时，作为电车心脏，又直接决定续航、补能效率、安全性和寿命等核心体验，是少数能够同时影响产品力与成本结构的零部件。 这意味着，围绕动力电池的博弈在车企与供应商之间，甚至电池产业内部从未间断。过去几年，无论是特斯拉、比亚迪、吉利，还是国内头部新势力，都相继走向电池的自研或自制。 理想汽车同样如此。伴随理想新款L8上市，“理想牌电池”也正式搭载上车。理想汽车首次对外回应了布局“理想牌电池”的思考。 随着新能源车一路普及，突破60%渗透率，电池厂商成为消费者买车的决策硬指标。宁德时</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">12</span>
+          <div class="title"><a href="https://36kr.com/p/3870292939658242?f=rss" target="_blank" rel="noopener">追赶FSD V14，理想在补哪些课？｜最前线</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">过去几年，智能驾驶行业的竞争重心经历了几次明显变化。 最早比的是硬件：激光雷达要不要上、摄像头装几个、算力做到多少 TOPS；随后进入大模型时代，竞争开始转向端到端、VLA（Vision-Language-Action）、World Model（世界模型）等路线。 到了今天，越来越多公司发现，仅仅拥有更大的模型已经不足以形成代际优势，真正决定上限的，开始变成模型、数据、算力和芯片之间能否形成一个持续迭代的闭环。 这也是为什么越来越多车企开始走向自研。 特斯拉几乎覆盖了从数据采集、训练基础设施、FSD模型到Dojo、自研芯片的全部环节。国内，无论小鹏、蔚来，还是理想，也都在不断向更底层延伸。 今</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">13</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872283604276228?f=rss" target="_blank" rel="noopener">蔚来ES8大五座版将于7月9日上市</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">6月27日，蔚来宣布ES8大五座版开启预订，将于7月9日正式上市。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">14</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872219380094217?f=rss" target="_blank" rel="noopener">博世集团：董事会人事调整不会对博世中国各项业务运营产生任何影响</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">6月27日晚，博世集团官微发文表示，此次集团董事会人事调整不会对博世中国各项业务运营产生任何影响。中国始终是博世全球最重要的战略市场之一，也是集团重要的创新基地。未来，博世将一如既往携手广大客户和合作伙伴，持续深耕中国市场。公告显示，经与股东充分沟通并达成一致，史蒂凡·哈通（Dr. Stefan Hartung）主动申请于2026年6月30日卸任博世集团董事会主席职务。他也将同时退出博世集团董事会及罗伯特·博世工业信托公司管理层。2026年7月1日起，董事会副主席克里斯蒂安·菲舍尔（Dr. Christian Fischer）将接任该职务。同时，董事会成员马库斯·福施纳（Dr. Markus </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">15</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872171923723272?f=rss" target="_blank" rel="noopener">乘联分会崔东树：5月中国汽车进口3.8万辆，同比降19%</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">6月28日，乘联分会秘书长崔东树发文表示，2026年5月进口车进口3.8万辆，下滑19%，但由于2025年1月基数低，虽然美国与伊朗战争导致运输受阻，进口车总体下降较小，2026年1-5月进口汽车16万辆，同比下降11%。随着国产车的崛起和国际品牌本土化加速，近几年汽车进口持续低迷，进口车持续3年负增长，如果熨平波动，则是连续8年的负增长。（新浪财经）</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">16</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872170864334086?f=rss" target="_blank" rel="noopener">郭明錤：iOS 27将进一步深化与Apple Intelligence的系统级整合</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">跟踪苹果产业链多年的分析师郭明錤发布报告指出，iOS 27将进一步深化与Apple Intelligence的系统级整合。其最新产业调查显示，为确保在AI负载下系统仍能顺畅运作，1H27新款配备A20处理器的较低阶iPhone之DRAM规格将升级至9GB（1.5GB×6-die），高于目前A19机型的8GB（2GB×4-die）。2H26配备A20Pro处理器的三款高阶机型（折叠机与两款18Pro机型）则维持12GB（1.5GBx8-die）。（财联社）</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">17</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872143344817158?f=rss" target="_blank" rel="noopener">央视曝手机测评作弊乱象</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">记者调查发现，数码产品测评这个领域的高度技术化，长期以来处于“无人能实锤作弊乱象”的灰色地带。网络安全专家介绍，整套作弊体系分为三层，层层美化测评数据：第一层厂商专供测评博主的特供媒体机，硬件经过筛选优化；第二层固件内置识别程序，检测到博主身份并自动开启高性能模式；第三层云端远程控制，可实时下发测评作弊配置。当这套系统识别到某博主启动测评时，就会进入“作弊模式”，自动拉高CPU性能、调高屏幕亮度、优化后台加载逻��，切换软件时仅加载界面而非完整应用，营造全程流畅的假象。边亮介绍，为了规避被发现的风险，这套测评作弊机制也经历了多轮迭代，隐蔽性越来越强。记者调查发现，由于特供样机、固件作弊、云端调</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">18</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872140630692872?f=rss" target="_blank" rel="noopener">国内首个第四代半导体材料全产业链项目落户郑州</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">近日，郑州高新区与中科粉研（河南）超硬材料有限公司签署协议，中科粉研第四代半导体材料生产基地正式落户该区。该基地是国内首个第四代半导体材料全产业链项目，将为河南在全球独具优势的超硬材料产业链补上关键的一环。本次签约落地的生产基地，将依托中科粉研全球首条LPPHT微纳米金刚石产线的技术积累，为实现第四代半导体核心材料的自主研发、生产和规模量产打下坚实基础。 (河南日报)</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">19</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3871321432527875?f=rss" target="_blank" rel="noopener">华为途灵平台完成3轮升级，覆盖鸿蒙智行五界</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">36氪获悉，6月26日，鸿蒙智行举办了一场华为途灵平台专场TECH DAY技术沟通会。华为途灵平台依托华为在AI和通信领域的技术优势，将调校经验通过算法与软件沉淀，提升机械性能上限，并基于车型定位不断开放新的特性，快速迭代。在操控层面，华为途灵平台的全维感知系统融合了ADS感知信息、车辆状态信息、驾驶意图信息、云端数据信息、车身域信息和座舱域信息等多维度数据。底盘可以提前预判、主动调整。从2023年11月至今，华为途灵平台已完成3轮升级，覆盖鸿蒙智行五界车型。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">20</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3871215128237313?f=rss" target="_blank" rel="noopener">功率半导体再启阶梯式调价，有厂商表示“AI相关的电源功率订单爆满，根本做不过来”</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">据《科创板日报》27日消息，由于AI算力集群功耗激增，功率半导体正成为存储之后的产业新增长引擎，行业再掀起一轮涨价潮。“我们AI相关的电源功率订单‘爆满’，现在订单根本做不过来”。一家功率半导体厂商人士向《科创板日报》记者表示，“因为公司算是少数具备量产能力的国产厂商，无论是面向数据中心800V HVDC等一次电源、服务器二次电源等产品，都已进入多家头部客户供应链并实现规模量产，所以订单需求十分旺盛。”多位业内人士判断，本轮成本驱动的涨价周期仍将持续一段时间，并且行业将加速功率器件低端产能的出清，市场份额将向具备IDM全链条能力或与上游深度绑定，且涉足高景气赛道的头部芯片企业集中。（财联社）</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">21</span>
+          <div class="title"><a href="https://sspai.com/prime/story/create-webview-in-shortcuts" target="_blank" rel="noopener">探索快捷指令的上限：用网页视图创建丰富界面与交互</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>少数派</span>
+          <span>20</span>
+          <span>sspai.com</span>
+        </div>
+        
+        <div class="summary">从锁屏按钮、锁屏小组件、负一屏小组件，到桌面小组件、控制中心、Siri、自动化触发……iPhone的快捷指令有着超级多的打开方式，我们也可以为自己写的或从网络上获取的实用快捷指令设置一种最顺手的。与之 ...查看全文本文为会员文章，出自《单篇文章》，订阅后可阅读全文。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">22</span>
+          <div class="title"><a href="https://sspai.com/post/111541" target="_blank" rel="noopener">派早报：鸿蒙智行发布尊界 S800 Grand Design 典藏大观</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>少数派</span>
+          <span>20</span>
+          <span>sspai.com</span>
+        </div>
+        
+        <div class="summary">Apple 调整产品价格，Figma 发布多项更新等。查看全文</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">23</span>
+          <div class="title"><a href="https://sspai.com/post/111421" target="_blank" rel="noopener">给记忆一个归处：我为什么开始使用 Apple 手记</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>少数派</span>
+          <span>20</span>
+          <span>sspai.com</span>
+        </div>
+        
+        <div class="summary">《手记》是Apple在iOS17.2中推出的原生日记应用，它可以帮助用户更轻松地记录生活、保存回忆、培养反思与感恩等习惯。今年以来，我频繁地使用手记这款应用。不过，我开始使用它的契机并不是为了写日记， ...查看全文</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">24</span>
+          <div class="title"><a href="https://sspai.com/post/111483" target="_blank" rel="noopener">把心情贴在手机背面：XTREM INNO 极稚墨水屏手机壳体验</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>少数派</span>
+          <span>20</span>
+          <span>sspai.com</span>
+        </div>
+        
+        <div class="summary">手机主屏幕的个性化，如今越发受到重视。遍观各大手机操作系统的更新，几乎都会提到主屏幕装扮方式的增加——从壁纸、时钟再到图标、挂件，几乎没有哪个角落是不能按自己喜好调整的。对比之下，手机背面反而成为了「 ...查看全文</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">25</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870979.html?f=rss" target="_blank" rel="noopener">尊界卖到150万，华为咋敢的？</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">26</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870960.html?f=rss" target="_blank" rel="noopener">汽车股集体跳水，多位董事长遭质问，网友调侃早卖早解脱</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">27</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870952.html?f=rss" target="_blank" rel="noopener">卫星通信“iPhone时刻”来了？</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">28</span>
+          <div class="title"><a href="https://www.producthunt.com/products/aurora-21" target="_blank" rel="noopener">Aurora Notch</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">A private notch workspace for every Mac Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">29</span>
+          <div class="title"><a href="https://www.producthunt.com/products/basedash" target="_blank" rel="noopener">Basedash for Excel</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Turn any Excel file into a live dashboard Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">30</span>
+          <div class="title"><a href="https://www.producthunt.com/products/vtt-for-mac" target="_blank" rel="noopener">VTT for Mac</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Voice-to-text for macOS with a fully on-device option Discussion | Link</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="金融财经">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      📈 金融财经
+      <span class="count">(4)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://s.weibo.com/weibo?q=江淮汽车股价腰斩" target="_blank" rel="noopener">江淮汽车股价腰斩</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>微博热搜</span>
+          <span>300</span>
+          <span>weibo.com</span>
+        </div>
+        
+        <div class="summary">江淮汽车股价大幅下跌，引发市场关注。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://howtotestfrontend.com/courses/jest-vitest-fundamentals" target="_blank" rel="noopener">Jest/Vitest interactive course (runs in the browser)</a></div>
+          
+          <span class="quality-star q3">***</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>50</span>
+          <span>howtotestfrontend.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 50 | Comments: 12 | By: howToTestFE</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872142280840197?f=rss" target="_blank" rel="noopener">近一周120多只个股获机构调研，广生堂调研机构数最多</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">近一周（6月20日至26日）机构调研个股有120多只，广生堂调研机构数最多。广生堂有53家机构调研，包括6家基金公司、6家证券公司、8家私募等。胜宏科技、盛弘股份、联合化学、恒坤新材等个股均有20家以上机构评级，其中恒坤新材、广信材料、鼎龙股份等个股均有时下热门的光刻胶概念。从市场表现来看，近一周机构调研股平均跌超2%，东方钽业、京东方A、信德新材、汇成真空等个股均涨超10%。（人民财讯）</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">4</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870973.html?f=rss" target="_blank" rel="noopener">美联储的集权式改革以及沃什的阳谋</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="食品旅行">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      🍜 食品旅行
+      <span class="count">(2)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://www.baidu.com/s?wd=%E6%9B%9D%E4%BD%9B%E5%BE%97%E8%A7%92%E9%98%9F%E9%95%BF%E6%AD%A3%E5%9B%A0%E5%BC%BA%E5%A5%B8%E6%8C%87%E6%8E%A7%E6%8E%A5%E5%8F%97%E8%B0%83%E6%9F%A5&sa=fyb_news&rsv_dl=fyb_news" target="_blank" rel="noopener">曝佛得角队长正因强奸指控接受调查</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>百度热搜</span>
+          <span>300</span>
+          <span>baidu.com</span>
+        </div>
+        
+        <div class="summary">据报道，佛得角国家队队长莱恩·门德斯目前正因一项强奸指控接受新西兰警方调查。案件发生于今年3月，地点位于新西兰奥克兰一家酒店，当时佛得角国家队正在当地参加国际足联系列友谊赛。案件已于2026年4月10日在奥克兰正式登记立案，目前警方调查仍在进行中。</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://www.producthunt.com/products/beehiiv" target="_blank" rel="noopener">Group Subscriptions by beehiiv</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Sell subscriptions to teams, companies, and organizations. Discussion | Link</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="综合资讯">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      📋 综合资讯
+      <span class="count">(33)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656100141708296228" target="_blank" rel="noopener">伊朗队最后时刻出局</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第1名 · 11098962</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656007934576885803" target="_blank" rel="noopener">女子花近2万摘囊肿得知根本不用摘</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第2名 · 10042756</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://www.toutiao.com/article/7656206420928496163" target="_blank" rel="noopener">下月起这些新规将施行</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第3名 · 9087061</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">4</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656255680495783470" target="_blank" rel="noopener">韩媒一片哀嚎：没有奇迹</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第4名 · 8222313</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">5</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7655699358997872683" target="_blank" rel="noopener">德国人为抢中国空调开始氪金了</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第5名 · 7439857</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">6</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656071457391493130" target="_blank" rel="noopener">宝宝牵狗被“拒绝”</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第6名 · 6731861</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">7</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656268030741315625" target="_blank" rel="noopener">运20家族更大了</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第8名 · 5511581</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">8</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656017003784044563" target="_blank" rel="noopener">C罗和莫德里奇下轮同场对决</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第9名 · 4987085</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">9</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7655651837168717355" target="_blank" rel="noopener">补时反超再绝平 伊朗从天堂跌入地狱</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第10名 · 4512501</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">10</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7655965918875189258" target="_blank" rel="noopener">男子持刀胁迫技师脱衣事发后翻窗坠亡</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第11名 · 4083080</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">11</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656026291263029254" target="_blank" rel="noopener">别再冤枉克孜尔千佛洞了</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第12名 · 3694523</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">12</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656273504718818870" target="_blank" rel="noopener">博主：韩国队把天胡牌打烂了</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第13名 · 3342943</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">13</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7655849554441338930" target="_blank" rel="noopener">江苏一高校举办殡仪礼仪大赛引热议</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第14名 · 3024820</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">14</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7655960412043362323" target="_blank" rel="noopener">轰6k与俄图95在日本海上空同框</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第15名 · 2736970</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">15</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656296750008782378" target="_blank" rel="noopener">中国空军战略投送能力有多强</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第20名 · 1660056</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">16</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7655189179814608959" target="_blank" rel="noopener">运-20新宣传片信息量太大</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第23名 · 1229800</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">17</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7655893562647117874" target="_blank" rel="noopener">94岁抗美援朝老兵与战友墓前“重逢”</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第24名 · 1112769</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">18</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7655707404752617535" target="_blank" rel="noopener">山东将出现两次强对流天气</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第26名 · 911058</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">19</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7655533418856054803" target="_blank" rel="noopener">女生在毕业典礼上求祝福却叫错称呼</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第27名 · 674928</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">20</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7656264073936568362" target="_blank" rel="noopener">葡萄牙主帅回应C罗踢满全场</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第28名 · 499999</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">21</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7655724550999195667" target="_blank" rel="noopener">塞尔维亚总统武契奇：将在数周后辞职</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第29名 · 370408</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">22</span>
+          <div class="title"><a href="https://www.toutiao.com/trending/7655993073482580010" target="_blank" rel="noopener">高温席卷欧洲 国产空调品牌销量激增</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>今日头条</span>
+          <span>300</span>
+          <span>toutiao.com</span>
+        </div>
+        
+        <div class="summary">头条热榜第30名 · 335159</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">23</span>
+          <div class="title"><a href="https://texashighways.com/culture/how-heb-became-texas-most-beloved-brand/" target="_blank" rel="noopener">How H-E-B became Texas' most beloved brand (2024)</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>105</span>
+          <span>texashighways.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 105 | Comments: 96 | By: NaOH</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">24</span>
+          <div class="title"><a href="https://ngrok.com/blog/aol-was-down-1996" target="_blank" rel="noopener">A human postmortem of the 1996 AOL outage</a></div>
+          
+          <span class="quality-star q4">****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>71</span>
+          <span>ngrok.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 71 | Comments: 24 | By: EndEntire</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">25</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872325064938497?f=rss" target="_blank" rel="noopener">特斯拉Model S签名典藏版限量投放欧洲市场</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">据报道，特斯拉Model S Signature Edition（签名典藏版）于近日正式登陆欧洲市场，该车型仅限量20台投放欧洲地区，采用定向受邀客户专属购买模式，不面向公众开放选购。据了解，特斯拉数月前已关停Model S、Model X全球线上订单通道。美国市场共推出250台Model S、100台Model X签名典藏版，目前本土库存已全部售罄。（界面）</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">26</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872268617897217?f=rss" target="_blank" rel="noopener">富信科技：公司近期未新增通信领域重大客户 亦未获取新增大额订单</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">富信科技6月28日发布声明，《破局与重塑：Micro-TEC国产化浪潮》是公司销售周志奇在CFCF2026光连接大会（6.27苏州）的演讲主题，其在该演讲中仅对公司产品和技术进行了介绍；网传《&lt;破局与重塑：Micro-TEC国产化浪潮&gt;周志奇演讲完整原文》为杜撰文章，此文与公司无关并完全不代表公司立场。公司生产的Micro TEC产品所使用的碲化铋材料无需使用纯度达6N级及以上的碲、铋等单质原料；公司近期未新增通信领域重大客户，亦未获取新增大额订单。据了解，行业内生产Micro TEC产品所使用的碲化铋材料亦无需使用纯度达6N级及以上的碲、铋等单质原料。公司已就此文涉及的虚假信息内</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">27</span>
+          <div class="title"><a href="https://36kr.com/newsflashes/3872217703077120?f=rss" target="_blank" rel="noopener">五菱印尼与Grab战略签约，Grab租赁平台将批量导入缤果车型</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">6月27日，上汽通用五菱宣布，五菱印尼与东南亚出行平台Grab日前在雅加达完成战略合作签约及车辆交付，Grab租赁平台批量导入缤果车型，全面投入印尼网约车营运。在本次Grab合作落地前，五菱印尼已于6月17日与本土头部租赁公司MPM完成战略合作签约及批量交车。（界面）</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">28</span>
+          <div class="title"><a href="https://www.producthunt.com/products/cloud-world-model" target="_blank" rel="noopener">Cloud World Model</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Simulate AWS, GCP & DigitalOcean without paying the bill Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">29</span>
+          <div class="title"><a href="https://www.producthunt.com/products/retromac" target="_blank" rel="noopener">RetroMac</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Turn your Mac into a time machine. Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">30</span>
+          <div class="title"><a href="https://www.producthunt.com/products/animdock-motion-templates-in-the-browser" target="_blank" rel="noopener">Animdock Motion Templates in the Browser</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Create trend motions in your browser! Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">31</span>
+          <div class="title"><a href="https://www.producthunt.com/products/sleek-analytics" target="_blank" rel="noopener">Sleek Analytics</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">See who's on your site. Right now. Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">32</span>
+          <div class="title"><a href="https://www.producthunt.com/products/figma" target="_blank" rel="noopener">Figma Motion</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Your Figma canvas now has a timeline Discussion | Link</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">33</span>
+          <div class="title"><a href="https://www.producthunt.com/products/nashra-turn-followers-into-clients" target="_blank" rel="noopener">Nashra</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Turn followers into clients. Discussion | Link</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="科学研究">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      🔬 科学研究
+      <span class="count">(3)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://www.psychologytoday.com/au/blog/mood-by-microbe/202606/what-ozempic-does-to-the-gut-brain-axis" target="_blank" rel="noopener">What Ozempic does to the gut-brain axis</a></div>
+          
+          <span class="quality-star q5">*****</span>
+        </div>
+        <div class="meta">
+          <span>Hacker News</span>
+          <span>121</span>
+          <span>psychologytoday.com</span>
+        </div>
+        
+        <div class="summary">HN Score: 121 | Comments: 274 | By: randycupertino</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870951.html?f=rss" target="_blank" rel="noopener">全球仅7%物联网设备“量子就绪”</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://www.producthunt.com/products/note-md" target="_blank" rel="noopener">note.md</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">your notes and research documentation now a local LLM Memory Discussion | Link</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="category-section" id="设计艺术">
+    <div class="category-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');">
+      🎨 设计艺术
+      <span class="count">(16)</span>
+      <span class="toggle"></span>
+    </div>
+    <div class="articles-list">
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">1</span>
+          <div class="title"><a href="https://36kr.com/p/3867976058803459?f=rss" target="_blank" rel="noopener">一折买 Miu Miu，谁在做奢侈品牌的"拼多多"？｜商业Friday</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>36氪</span>
+          <span>20</span>
+          <span>36kr.com</span>
+        </div>
+        
+        <div class="summary">文｜贺哲馨 编辑｜乔芊 Judy第一次意识到，原来打折的奢侈品也有准入门槛，是在申请加入On The List的一次特卖活动时。提交申请后的第三天，她依旧没有收到邀请消息。“我还以为填完资料就能进去。”她说。 按照平台规则，特卖活动需要邀请码才能进入。如果迟迟没有通过，则需要邀请两位好友注册，才能获得进入候补名单的机会。至于最终能否收到邀请码，没人说得清楚。 “有点像抽签，也有点像开盲盒。”Judy笑着说，“明明我是才是买家，结果搞得像在申请什么私人会员俱乐部。越进不去，越想进去看看。” Judy试图进入的，是近年来正在中国一线城市兴起的一类新渠道——会员制奢侈品特卖平台。On The Lis</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">2</span>
+          <div class="title"><a href="https://www.qbitai.com/2026/06/438750.html" target="_blank" rel="noopener">从需求到设计到代码，一个软件全搞定！TRAE Work Design实测来了</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>qbitai.com</span>
+          <span>20</span>
+          <span>qbitai.com</span>
+        </div>
+        
+        <div class="summary">精准识别设计系统</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">3</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870985.html?f=rss" target="_blank" rel="noopener">IBM宣布0.7nm突破，工程师却集体“挑刺”</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">4</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870982.html?f=rss" target="_blank" rel="noopener">钱在挪窝</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">5</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870978.html?f=rss" target="_blank" rel="noopener">从《戏子贱不过文人》看：全网皆在情绪审判</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">6</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870977.html?f=rss" target="_blank" rel="noopener">劳伦斯魔咒是个什么梗？</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">7</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870970.html?f=rss" target="_blank" rel="noopener">我无力你托举，大热韩剧送来新的戏剧发动机</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">8</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870966.html?f=rss" target="_blank" rel="noopener">《恋与深空》凌晨为新男主道歉，但好戏还在后头</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">9</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870962.html?f=rss" target="_blank" rel="noopener">国产三蹦子火到丹麦，轮到老外“崇中媚华”了</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+        <div class="summary">技术的终极使命从来不是堆参数、摆逼格，是解决人的真实需求</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">10</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870963.html?f=rss" target="_blank" rel="noopener">欧盟自认为学会了“造牌”？我和中欧相关人士聊了聊</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+        <div class="summary">欧盟正在亲手毁掉自己最想要的东西</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">11</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870964.html?f=rss" target="_blank" rel="noopener">乔布斯的“心学”：大道至简，直觉开路</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">12</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870961.html?f=rss" target="_blank" rel="noopener">一旦霍尔木兹海峡收费</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">13</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870957.html?f=rss" target="_blank" rel="noopener">30年足球定律：尊重规律+持之以恒=比肩世界</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">14</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870956.html?f=rss" target="_blank" rel="noopener">被判“死刑”的那些年，发动机没少卖</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">15</span>
+          <div class="title"><a href="https://www.huxiu.com/article/4870700.html?f=rss" target="_blank" rel="noopener">独家对话|YouMind玉伯：这两年我一直在祛互联网的魅</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>rss.huxiu.com</span>
+          <span>20</span>
+          <span>huxiu.com</span>
+        </div>
+        
+        <div class="summary">成为新时代的YouTube</div>
+        
+      </div>
+      
+      <div class="article-card">
+        <div class="top-row">
+          <span class="card-num">16</span>
+          <div class="title"><a href="https://www.producthunt.com/products/saycraft" target="_blank" rel="noopener">SayCraft</a></div>
+          
+          
+        </div>
+        <div class="meta">
+          <span>Product Hunt</span>
+          <span>15</span>
+          <span>producthunt.com</span>
+        </div>
+        
+        <div class="summary">Build a web app by talking through a meeting Discussion | Link</div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Top">Up</button>
+<div class="footer">Generated by NewsDigest - 2026-06-28</div>
+<script>
+(function(){var btn=document.getElementById('backToTop');var t=false;window.addEventListener('scroll',function(){if(!t){requestAnimationFrame(function(){btn.classList.toggle('show',window.scrollY>400);t=false});t=true;});})();
+</script>
+</body>
+</html>
